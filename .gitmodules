@@ -1,0 +1,3 @@
+[submodule "libs/libbiscuit"]
+	path = libs/libbiscuit
+	url = git@github.com:shanet/libbiscuit.git
