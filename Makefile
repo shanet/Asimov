@@ -5,19 +5,22 @@
 CC=gcc
 LANG=c
 
-PROJ_NAME=asimov-server
+PROJ_NAME = asimov-server
 VERSION = "\"1.0.0\""
 
-BINARY=asimov-server
+BINARY = $(PROJ_NAME)
 
-#INSTALL_DIR=/usr/sbin/
+INSTALL_DIR = /usr/sbin/
 
-SOURCES=$(wildcard src/*.c)
-OBJECTS=$(SOURCES:.$(LANG)=.o)
+SOURCES = $(wildcard src/server/*.c)
+OBJECTS = $(SOURCES:.$(LANG)=.o)
 
-CFLAGS=-Wall -Wextra -DVERSION=$(VERSION)
+SRC_INCLUDE_DIRS = -Ilibs/libbiscuit/include
+LIB_INCLUDE_DIRS = -Llibs/libbiscuit/bin/static
 
-INCLUDE_DIRS = libs/
+LIBS = -lbiscuit
+
+CFLAGS = -std=c99 -Wall -Wextra $(SRC_INCLUDE_DIRS) -DVERSION=$(VERSION)
 
 DEBUG ?= 1
 ifeq ($(DEBUG), 1)
@@ -29,7 +32,7 @@ endif
 .PHONY = all install remove clean
 
 all: $(OBJECTS)
-	$(CC) -o -Ibin/$(BINARY) $^ $(LIBS)
+	$(CC) -o bin/$(BINARY) $^ $(LIB_INCLUDE_DIRS) $(LIBS)
 
 install:
 	cp bin/$(BINARY) $(INSTALL_DIR)$(BINARY)
