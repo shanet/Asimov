@@ -1,5 +1,7 @@
 # Build Folders (you can keep bin if you'd like, to store dlls and pdbs)
-[Bb]in/
+#[Bb]in/
+bin/asimov-server
+bin/asimov-client
 [Oo]bj/
 
 # mstest test results
@@ -89,7 +91,7 @@ csx
 AppPackages/
 
 # Others
-[Bb]in
+#[Bb]in
 [Oo]bj
 sql
 TestResults
