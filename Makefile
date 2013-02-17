@@ -45,3 +45,4 @@ remove:
 
 clean:
 	rm -f $(OBJECTS)
+	rm -f bin/$(BINARY)
