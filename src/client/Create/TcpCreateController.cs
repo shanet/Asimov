@@ -1,22 +1,19 @@
-﻿namespace AsimovClient.Roomba
+﻿namespace AsimovClient.Create
 {
     using System;
-    using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
-    using System.Linq;
     using System.Net;
     using System.Net.Sockets;
     using System.Text;
-    using System.Threading.Tasks;
 
-    public class RoombaController
+    public class TcpCreateController : ICreateController
     {
         private TcpClient client;
         private IPAddress ip;
         private int port;
 
-        public RoombaController(IPAddress ip, int port)
+        public TcpCreateController(IPAddress ip, int port)
         {
             this.ip = ip;
             this.port = port;
@@ -37,14 +34,44 @@
             }
         }
 
-        public RoombaController(String ip, int port)
+        public TcpCreateController(String ip, int port)
             : this(IPAddress.Parse(ip), port)
         {
         }
 
-        ~RoombaController()
+        ~TcpCreateController()
         {
             this.client.Close();
+        }
+
+        public void PowerOn()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void PowerOff()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetMode(CreateMode mode)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Drive(int velocity, int radius, int distance)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Turn(int velocity, int radius, int degrees)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Stop()
+        {
+            throw new NotImplementedException();
         }
 
         private void SendCommand(String command)
@@ -60,7 +87,7 @@
 
                 Debug.WriteLine("Command sent!");
             }
-            catch (IOException e)
+            catch (IOException)
             {
                 Console.Error.WriteLine("ERROR: Could not communicate with the server.");
             }

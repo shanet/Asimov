@@ -43,8 +43,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AsimovClient.cs" />
+    <Compile Include="Create\ConsoleCreateController.cs" />
+    <Compile Include="Create\ICreateController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Roomba\RoombaController.cs" />
+    <Compile Include="Create\TcpCreateController.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

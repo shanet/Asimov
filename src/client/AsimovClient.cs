@@ -5,13 +5,17 @@
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
-    using Roomba;
+    using Create;
 
     public class AsimovClient
     {
         static void Main(string[] args)
         {
-            RoombaController roomba = new RoombaController("127.0.0.1", 5000);
+            ICreateController roomba = new ConsoleCreateController();
+
+            roomba.PowerOn();
+            roomba.Drive(1, 2, 3);
+            roomba.PowerOff();
         }
     }
 }
