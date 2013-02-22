@@ -45,6 +45,7 @@
     <Compile Include="AsimovClient.cs" />
     <Compile Include="Create\ConsoleCreateController.cs" />
     <Compile Include="Create\ICreateController.cs" />
+    <Compile Include="Logging\AsimovLog.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Create\TcpCreateController.cs" />
   </ItemGroup>
