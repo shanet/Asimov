@@ -1,21 +1,32 @@
-﻿namespace AsimovClient
+﻿//------------------------------------------------------------------------------
+// <copyright file="AsimovClient.cs" company="Gage Ames">
+//     Copyright (c) Gage Ames.  All rights reserved.
+// </copyright>
+//------------------------------------------------------------------------------
+
+namespace AsimovClient
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
     using Create;
+    using Logging;
+    using System;
 
     public class AsimovClient
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
-            ICreateController roomba = new ConsoleCreateController();
+            try
+            {
+                ICreateController roomba = new ConsoleCreateController();
 
-            roomba.PowerOn();
-            roomba.Drive(1, 2, 3);
-            roomba.PowerOff();
+                roomba.PowerOn();
+                roomba.Drive(1, 2);
+                roomba.PowerOff();
+            }
+            catch (Exception e)
+            {
+                Console.Error.WriteLine("FATAL ERROR: {0}", e);
+                AsimovLog.WriteLine("FATAL ERROR: {0}", e);
+            }
         }
     }
 }
