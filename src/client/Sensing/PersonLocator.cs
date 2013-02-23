@@ -22,14 +22,8 @@ namespace AsimovClient.Sensing
         {
             this.isPersonNotCenteredInvoked = false;
 
+            // If the sensor changes, we need to set up the new sensor
             sensorChooser.KinectChanged += this.KinectSensorChanged;
-            sensorChooser.Start();
-
-            // Turn on the skeleton stream to receive skeleton frames
-            this.kinect.SkeletonStream.Enable();
-
-            // Add an event handler to be called whenever there is new color frame data
-            this.kinect.SkeletonFrameReady += this.SensorSkeletonFrameReady;
         }
 
         public delegate void OnPersonCenteredHandler(object sender);
@@ -89,6 +83,19 @@ namespace AsimovClient.Sensing
             if (args.NewSensor != null)
             {
                 this.kinect = args.NewSensor;
+
+                // Add an event handler to be called whenever there is new color frame data
+                this.kinect.SkeletonFrameReady += this.SensorSkeletonFrameReady;
+
+                // Turn on the skeleton stream to receive skeleton frames
+                this.kinect.SkeletonStream.Enable();
+            }
+
+            if (args.OldSensor != null)
+            {
+                // Turn off the skelton sensor and unsubscribe from its events
+                args.OldSensor.SkeletonFrameReady -= this.SensorSkeletonFrameReady;
+                args.OldSensor.SkeletonStream.Disable();
             }
         }
     }

@@ -36,9 +36,7 @@ namespace AsimovClient
                 personLocator.OnPersonNotCentered += OnPersonNotCentered;
                 personLocator.OnPersonCentered += OnPersonCentered;
 
-                // Start the sensor!
-                //TODO: Surround in a try catch?
-                sensorChooser.Kinect.Start();
+                sensorChooser.Start();
 
                 endEvent.WaitOne();
             }
