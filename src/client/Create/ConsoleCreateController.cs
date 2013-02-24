@@ -141,5 +141,25 @@ namespace AsimovClient.Create
         {
             Console.WriteLine("Play song #{0}.", songNumber);
         }
+
+        public void WaitTime(double time)
+        {
+            Console.WriteLine("Wait for {0} ms.", (int)Units.BaseToMilli(time));
+        }
+
+        public void WaitDistance(double distance)
+        {
+            Console.WriteLine("Wait until we travel {0} mm.", (int)Units.BaseToMilli(distance));
+        }
+
+        public void WaitAngle(int angle)
+        {
+            Console.WriteLine("Wait until we rotate {0} degrees.", angle);
+        }
+
+        public void WaitEvent(WaitEvent waitEvent)
+        {
+            Console.WriteLine("Wait until the event \"{0}\" occurs.", waitEvent);
+        }
     }
 }

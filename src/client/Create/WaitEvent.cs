@@ -1,5 +1,5 @@
 ﻿//------------------------------------------------------------------------------
-// <copyright file="Event.cs" company="Gage Ames">
+// <copyright file="WaitEvent.cs" company="Gage Ames">
 //     Copyright (c) Gage Ames.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
@@ -11,7 +11,7 @@ namespace AsimovClient.Create
         /// <summary>
         /// Any wheel drops.
         /// </summary>
-        WheelDrop,
+        WheelDrop = 1,
 
         /// <summary>
         /// The front wheel drops.

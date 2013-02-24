@@ -198,6 +198,26 @@ namespace AsimovClient.Create
             this.ExecuteCommand("SONG PLAY {0}", songNumber);
         }
 
+        public void WaitTime(double time)
+        {
+            this.ExecuteCommand("WAIT TIME {0}", (int)Units.BaseToMilli(time));
+        }
+
+        public void WaitDistance(double distance)
+        {
+            this.ExecuteCommand("WAIT DISTANCE {0}", (int)Units.BaseToMilli(distance));
+        }
+
+        public void WaitAngle(int angle)
+        {
+            this.ExecuteCommand("WAIT ANGLE {0}", angle);
+        }
+
+        public void WaitEvent(WaitEvent waitEvent)
+        {
+            this.ExecuteCommand("WAIT EVENT {0}", (int)waitEvent);
+        }
+
         private void ExecuteCommand(string commandFormat, params object[] args)
         {
             string command = string.Format(commandFormat, args);

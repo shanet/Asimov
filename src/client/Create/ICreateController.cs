@@ -151,5 +151,33 @@ namespace AsimovClient.Create
         void PlaySong(int songNumber);
 
         #endregion
+
+        #region Wait
+
+        /// <summary>
+        /// Hold all commands until the specified time has elapsed.
+        /// </summary>
+        /// <param name="time">Time to wait in seconds.</param>
+        void WaitTime(double time);
+
+        /// <summary>
+        /// Hold all commands until the Create has moved the specified distance.
+        /// </summary>
+        /// <param name="distance">The distance to wait for in meters.</param>
+        void WaitDistance(double distance);
+
+        /// <summary>
+        /// Hold all commands until the Create has rotated the specified number of degrees.
+        /// </summary>
+        /// <param name="angle">The angle to wait for in degrees.</param>
+        void WaitAngle(int angle);
+
+        /// <summary>
+        /// Hold all commands until the specified event occurs.
+        /// </summary>
+        /// <param name="waitEvent">The event to wait for.</param>
+        void WaitEvent(WaitEvent waitEvent);
+
+        #endregion
     }
 }
