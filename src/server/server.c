@@ -58,9 +58,10 @@ int startServer(void) {
         printf("%s: Starting server...\n", prog);
     }
 
-    if(getServerInfo(port) == ERR) goto err;
-    if(bindToSocket() == ERR) goto err;
-    if(listen(listenSocket, BACKLOG) != 0) goto err;
+    if(getServerInfo(port) == ERR || bindToSocket() == ERR || listen(listenSocket, BACKLOG) != 0) {
+        fprintf(stderr, "%s: Failed to start server: %s\n", prog, strerror(errno));
+        exit(ABNORMAL_EXIT);
+    }
 
     childPid = NO_CHILD;
 
@@ -68,14 +69,15 @@ int startServer(void) {
         printf("%s: Server started.\n", prog);
     }
     return SUCCESS;
-
-    err:
-    fprintf(stderr, "%s: Failed to start server: %s\n", prog, strerror(errno));
-    exit(ABNORMAL_EXIT);
 }
 
 
 void stopServer(void) {
+    if(childPid != NO_CHILD) {
+        kill(childPid, SIGTERM);
+        childPid = NO_CHILD;
+    }
+
     close(clientSocket);
     close(listenSocket);
 }
@@ -280,15 +282,10 @@ void uninstallSignalHandlers(void) {
 
 void signalHandler(const int signal) {
     if(signal == SIGINT || signal == SIGTERM) {
-        if(getpid() == childPid) return;
-
         if(verbosity >= DBL_VERBOSE) {
             printf("%s: Cleaning up...\n", prog);
         }
 
-        if(childPid != NO_CHILD) {
-            kill(childPid, SIGTERM);
-        }
         stopServer();
         exit(NORMAL_EXIT);
     } else if(signal == SIGCHLD) {
