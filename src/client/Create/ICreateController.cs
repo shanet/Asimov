@@ -67,61 +67,72 @@ namespace AsimovClient.Create
         /// <summary>
         /// Drive the Create at the given velocity and radius until another drive function is called.
         /// </summary>
-        /// <param name="velocity">Velocity in millimeters/millisecond at which to drive.</param>
-        /// <param name="radius">Radius in degrees at which to drive.</param>
-        void Drive(int velocity, int radius);
+        /// <param name="velocity">Velocity at which to drive in meters/second. [-0.5, 0.5]</param>
+        /// <param name="radius">Radius at which to drive in meters. [-2.0, 2.0]</param>
+        void Drive(double velocity, double radius);
 
         /// <summary>
         /// Drive the Create in a straight line at the given velocity until another drive function is called.
         /// </summary>
-        /// <param name="velocity">Velocity at which to drive in millimeters/millisecond.</param>
-        void Drive(int velocity);
+        /// <param name="velocity">Velocity at which to drive in meters/second. [-0.5, 0.5]</param>
+        void Drive(double velocity);
 
         /// <summary>
-        /// Drive the Create at the given velocity and radius for the given distance in millimeters.
+        /// Drive the Create at the given velocity and radius for the given distance.
         /// </summary>
-        /// <param name="velocity">Velocity at which to drive in millimeters/millisecond.</param>
-        /// <param name="radius">Radius at which to drive in degrees.</param>
-        /// <param name="distance">Distance to drive in millimeters.</param>
-        void DriveDistance(int velocity, int radius, int distance);
+        /// <param name="velocity">Velocity at which to drive in meters/second. [-0.5, 0.5]</param>
+        /// <param name="radius">Radius at which to drive in meters. [-2.0, 2.0]</param>
+        /// <param name="distance">Distance to drive in meters. [-2.0, 2.0]</param>
+        void DriveDistance(double velocity, double radius, double distance);
 
         /// <summary>
-        /// Drive the Create in a straight line at the given velocity for the given distance in millimeters.
+        /// Drive the Create in a straight line at the given velocity for the given distance.
         /// </summary>
-        /// <param name="velocity">Velocity at which to drive in millimeters/millisecond.</param>
-        /// <param name="distance">Distance to drive in millimeters.</param>
-        void DriveDistance(int velocity, int distance);
+        /// <param name="velocity">Velocity at which to drive in meters/second. [-0.5, 0.5]</param>
+        /// <param name="distance">Distance to drive in meters. [-2.0, 2.0]</param>
+        void DriveDistance(double velocity, double distance);
 
         /// <summary>
-        /// Drive the Create at the given velocity and radius for the given time in milliseconds.
+        /// Drive the Create at the given velocity and radius for the given time.
         /// </summary>
-        /// <param name="velocity">Velocity at which to drive in millimeters/millisecond.</param>
-        /// <param name="radius">Radius at which to drive in degrees.</param>
-        /// <param name="time">Time to drive in milliseconds.</param>
-        void DriveTime(int velocity, int radius, int time);
+        /// <param name="velocity">Velocity at which to drive in meters/second. [-0.5, 0.5]</param>
+        /// <param name="radius">Radius at which to drive in meters. [-2.0, 2.0]</param>
+        /// <param name="time">Time to drive in seconds.</param>
+        void DriveTime(double velocity, double radius, double time);
 
         /// <summary>
-        /// Drive the Create in a straight line at the given velocity for the given time in milliseconds.
+        /// Drive the Create in a straight line at the given velocity for the given time.
         /// </summary>
-        /// <param name="velocity">Velocity at which to drive in millimeters/millisecond.</param>
-        /// <param name="time">Time to drive in milliseconds.</param>
-        void DriveTime(int velocity, int time);
+        /// <param name="velocity">Velocity at which to drive in meters/second. [-0.5, 0.5]</param>
+        /// <param name="time">Time to drive in seconds.</param>
+        void DriveTime(double velocity, double time);
 
         /// <summary>
         /// Drive the left and right wheels of the Create individually at the given right and left velocity.
         /// </summary>
-        /// <param name="leftVelocity">Velocity at which to drive the left wheel in millimeters/millisecond.</param>
-        /// <param name="rightVelocity">Velocity at which to drive the right wheel in millimeters/millisecond.</param>
-        void DriveDirect(int leftVelocity, int rightVelocity);
+        /// <param name="leftVelocity">Velocity at which to drive the left wheel in meters/second. [-0.5, 0.5]</param>
+        /// <param name="rightVelocity">Velocity at which to drive the right wheel in meters/second. [-0.5, 0.5]</param>
+        void DriveDirect(double leftVelocity, double rightVelocity);
 
         /// <summary>
-        /// Turn the Create in place at the given velocity and radius (either clockwise or counter-clockwise)
-        /// for the given number of degrees.
+        /// Spin the Create in place clockwise at the given velocity.
         /// </summary>
-        /// <param name="velocity">Velocity at which to turn in millimeters/millisecond.</param>
-        /// <param name="radius">Radius at which to turn in degrees.</param>
+        /// <param name="velocity">Velocity at which to turn in meters/second (use a negative velocity to spin counterclockwise). [-0.5, 0.5]</param>
+        void Spin(double velocity);
+
+        /// <summary>
+        /// Spin the Create in place clockwise at the given velocity for the given number of degrees.
+        /// </summary>
+        /// <param name="velocity">Velocity at which to turn in meters/second (use a negative velocity to spin counterclockwise). [-0.5, 0.5]</param>
         /// <param name="degrees">Degrees to turn.</param>
-        void Turn(int velocity, int radius, int degrees);
+        void SpinDistance(double velocity, int degrees);
+
+        /// <summary>
+        /// Spin the Create in place clockwise at the given velocity for the given number of seconds.
+        /// </summary>
+        /// <param name="velocity">Velocity at which to turn in meters/second (use a negative velocity to spin counterclockwise). [-0.5, 0.5]</param>
+        /// <param name="time">Time to spin in seconds.</param>
+        void SpinTime(double velocity, double time);
 
         /// <summary>
         /// Stop the Create.

@@ -11,6 +11,7 @@ namespace AsimovClient.Create
     using System.Net;
     using System.Net.Sockets;
     using System.Text;
+    using Helpers;
     using Logging;
 
     public class TcpCreateController : ICreateController
@@ -78,44 +79,78 @@ namespace AsimovClient.Create
             this.ExecuteCommand("MODE {0}", mode.ToString().ToUpper());
         }
 
-        public void Drive(int velocity, int radius)
+        public void Drive(double velocity, double radius)
         {
-            this.ExecuteCommand("DRIVE NORMAL {0} {1}", velocity, radius);
+            Verify.ArgumentInRange(velocity, CreateConstants.VelocityMin, CreateConstants.VelocityMax, "velocity");
+            Verify.ArgumentInRange(radius, CreateConstants.RadiusMin, CreateConstants.RadiusMax, "radius");
+
+            this.ExecuteCommand("DRIVE NORMAL {0} {1}", (int)Units.BaseToMilli(velocity), (int)Units.BaseToMilli(radius));
         }
 
-        public void Drive(int velocity)
+        public void Drive(double velocity)
         {
-            this.ExecuteCommand("DRIVE STRAIGHT {0}", velocity);
+            Verify.ArgumentInRange(velocity, CreateConstants.VelocityMin, CreateConstants.VelocityMax, "velocity");
+
+            this.ExecuteCommand("DRIVE STRAIGHT {0}", (int)Units.BaseToMilli(velocity));
         }
 
-        public void DriveDistance(int velocity, int radius, int distance)
+        public void DriveDistance(double velocity, double radius, double distance)
         {
-            this.ExecuteCommand("DRIVE DISTANCE {0} {1} {2}", velocity, radius, distance);
+            Verify.ArgumentInRange(velocity, CreateConstants.VelocityMin, CreateConstants.VelocityMax, "velocity");
+            Verify.ArgumentInRange(radius, CreateConstants.RadiusMin, CreateConstants.RadiusMax, "radius");
+
+            this.ExecuteCommand("DRIVE DISTANCE {0} {1} {2}", (int)Units.BaseToMilli(velocity), (int)Units.BaseToMilli(radius), (int)Units.BaseToMilli(distance));
         }
 
-        public void DriveDistance(int velocity, int distance)
+        public void DriveDistance(double velocity, double distance)
         {
-            this.ExecuteCommand("DRIVE STRAIGHT DISTANCE {0} {1}", velocity, distance);
+            Verify.ArgumentInRange(velocity, CreateConstants.VelocityMin, CreateConstants.VelocityMax, "velocity");
+
+            this.ExecuteCommand("DRIVE STRAIGHT DISTANCE {0} {1}", (int)Units.BaseToMilli(velocity), (int)Units.BaseToMilli(distance));
         }
 
-        public void DriveTime(int velocity, int radius, int time)
+        public void DriveTime(double velocity, double radius, double time)
         {
-            this.ExecuteCommand("DRIVE TIME {0} {1} {2}", velocity, radius, time);
+            Verify.ArgumentInRange(velocity, CreateConstants.VelocityMin, CreateConstants.VelocityMax, "velocity");
+            Verify.ArgumentInRange(radius, CreateConstants.RadiusMin, CreateConstants.RadiusMax, "radius");
+
+            this.ExecuteCommand("DRIVE TIME {0} {1} {2}", (int)Units.BaseToMilli(velocity), (int)Units.BaseToMilli(radius), (int)Units.BaseToMilli(time));
         }
 
-        public void DriveTime(int velocity, int time)
+        public void DriveTime(double velocity, double time)
         {
-            this.ExecuteCommand("DRIVE STRAIGHT TIME {0} {1}", velocity, time);
+            Verify.ArgumentInRange(velocity, CreateConstants.VelocityMin, CreateConstants.VelocityMax, "velocity");
+
+            this.ExecuteCommand("DRIVE STRAIGHT TIME {0} {1}", (int)Units.BaseToMilli(velocity), (int)Units.BaseToMilli(time));
         }
 
-        public void DriveDirect(int leftVelocity, int rightVelocity)
+        public void DriveDirect(double leftVelocity, double rightVelocity)
         {
-            this.ExecuteCommand("DRIVE DIRECT {0} {1}", leftVelocity, rightVelocity);
+            Verify.ArgumentInRange(leftVelocity, CreateConstants.VelocityMin, CreateConstants.VelocityMax, "leftVelocity");
+            Verify.ArgumentInRange(rightVelocity, CreateConstants.VelocityMin, CreateConstants.VelocityMax, "rightVelocity");
+
+            this.ExecuteCommand("DRIVE DIRECT {0} {1}", (int)Units.BaseToMilli(leftVelocity), (int)Units.BaseToMilli(rightVelocity));
         }
 
-        public void Turn(int velocity, int radius, int degrees)
+        public void Spin(double velocity)
         {
-            throw new NotImplementedException();
+            Verify.ArgumentInRange(velocity, CreateConstants.VelocityMin, CreateConstants.VelocityMax, "velocity");
+
+            this.ExecuteCommand("DRIVE SPIN DIRECT {0}", (int)Units.BaseToMilli(velocity));
+        }
+
+        public void SpinDistance(double velocity, int degrees)
+        {
+            Verify.ArgumentInRange(velocity, CreateConstants.VelocityMin, CreateConstants.VelocityMax, "velocity");
+
+            this.ExecuteCommand("DRIVE SPIN DISTANCE {0} {1}", (int)Units.BaseToMilli(velocity), degrees);
+        }
+
+        public void SpinTime(double velocity, double time)
+        {
+            Verify.ArgumentInRange(velocity, CreateConstants.VelocityMin, CreateConstants.VelocityMax, "velocity");
+
+            this.ExecuteCommand("DRIVE SPIN TIME {0} {1}", (int)Units.BaseToMilli(velocity), (int)Units.BaseToMilli(time));
         }
 
         public void Stop()
@@ -137,16 +172,8 @@ namespace AsimovClient.Create
 
         public void SetPowerLed(int color, int intensity)
         {
-            // Check that the arguments are valid
-            if (color < 0 || color > 255)
-            {
-                throw new ArgumentException("color must be between 0 and 255", "color");
-            }
-
-            if (intensity < 0 || intensity > 255)
-            {
-                throw new ArgumentException("intensity must be between 0 and 255", "intensity");
-            }
+            Verify.ArgumentInRange(color, CreateConstants.PowerLedColorMin, CreateConstants.PowerLedColorMax, "color");
+            Verify.ArgumentInRange(intensity, CreateConstants.PowerLedIntensityMin, CreateConstants.PowerLedIntensityMax, "intensity");
 
             this.ExecuteCommand("LED POWER {0} {1}", color, intensity);
         }
@@ -163,7 +190,6 @@ namespace AsimovClient.Create
 
         public void DefineSong(int songNumber, int[] notes, int[] durations)
         {
-            //TODO: In what format do we pass notes and duration?
             this.ExecuteCommand("SONG DEFINE {0} {1} {2}", songNumber, string.Join(",", notes), string.Join(",", durations));
         }
 

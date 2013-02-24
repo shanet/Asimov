@@ -7,6 +7,7 @@
 namespace AsimovClient.Create
 {
     using System;
+    using Helpers;
 
     public class ConsoleCreateController : ICreateController
     {
@@ -22,12 +23,12 @@ namespace AsimovClient.Create
 
         public void SetMode(CreateMode mode)
         {
-            Console.WriteLine("Mode set to {0}.", mode.ToString());
+            Console.WriteLine("Mode set to {0}.", mode);
         }
 
-        public void Turn(int velocity, int radius, int degrees)
+        public void Turn(double velocity, double radius, int degrees)
         {
-            Console.WriteLine("Turn {0} degrees at {1} mm/ms with radius {2} mm.", degrees, velocity, radius);
+            Console.WriteLine("Turn {0} degrees at {1} mm/s with radius {2} mm.", degrees, (int)Units.BaseToMilli(velocity), (int)Units.BaseToMilli(radius));
         }
 
         public void Stop()
@@ -35,39 +36,77 @@ namespace AsimovClient.Create
             Console.WriteLine("Stop.");
         }
 
-        public void Drive(int velocity, int radius)
+        public void Drive(double velocity, double radius)
         {
-            Console.WriteLine("Drive at {0} mm/ms with radius {1} mm.", velocity, radius);
+            Verify.ArgumentInRange(velocity, CreateConstants.VelocityMin, CreateConstants.VelocityMax, "velocity");
+            Verify.ArgumentInRange(radius, CreateConstants.RadiusMin, CreateConstants.RadiusMax, "radius");
+
+            Console.WriteLine("Drive at {0} mm/s with radius {1} mm.", (int)Units.BaseToMilli(velocity), (int)Units.BaseToMilli(radius));
         }
 
-        public void Drive(int velocity)
+        public void Drive(double velocity)
         {
-            Console.WriteLine("Drive straight at {0} mm/ms.", velocity);
+            Verify.ArgumentInRange(velocity, CreateConstants.VelocityMin, CreateConstants.VelocityMax, "velocity");
+
+            Console.WriteLine("Drive straight at {0} mm/s.", (int)Units.BaseToMilli(velocity));
         }
 
-        public void DriveDistance(int velocity, int radius, int distance)
+        public void DriveDistance(double velocity, double radius, double distance)
         {
-            Console.WriteLine("Drive {0} mm at {1} mm/ms with radius {2} mm.", distance, velocity, radius);
+            Verify.ArgumentInRange(velocity, CreateConstants.VelocityMin, CreateConstants.VelocityMax, "velocity");
+            Verify.ArgumentInRange(radius, CreateConstants.RadiusMin, CreateConstants.RadiusMax, "radius");
+
+            Console.WriteLine("Drive {0} mm at {1} mm/s with radius {2} mm.", distance, (int)Units.BaseToMilli(velocity), (int)Units.BaseToMilli(radius));
         }
 
-        public void DriveDistance(int velocity, int distance)
+        public void DriveDistance(double velocity, double distance)
         {
-            Console.WriteLine("Drive straight {0} mm at {1} mm/ms.", distance, velocity);
+            Verify.ArgumentInRange(velocity, CreateConstants.VelocityMin, CreateConstants.VelocityMax, "velocity");
+
+            Console.WriteLine("Drive straight {0} mm at {1} mm/s.", distance, (int)Units.BaseToMilli(velocity));
         }
 
-        public void DriveTime(int velocity, int radius, int time)
+        public void DriveTime(double velocity, double radius, double time)
         {
-            Console.WriteLine("Drive for {0} ms at {1} mm/ms with radius {2} mm.", time, velocity, radius);
+            Verify.ArgumentInRange(velocity, CreateConstants.VelocityMin, CreateConstants.VelocityMax, "velocity");
+
+            Console.WriteLine("Drive for {0} ms at {1} mm/s with radius {2} mm.", (int)Units.BaseToMilli(time), (int)Units.BaseToMilli(velocity), (int)Units.BaseToMilli(radius));
         }
 
-        public void DriveTime(int velocity, int time)
+        public void DriveTime(double velocity, double time)
         {
-            Console.WriteLine("Drive straight for {0} ms at {1} mm/ms.", time, velocity);
+            Verify.ArgumentInRange(velocity, CreateConstants.VelocityMin, CreateConstants.VelocityMax, "velocity");
+
+            Console.WriteLine("Drive straight for {0} ms at {1} mm/s.", (int)Units.BaseToMilli(time), (int)Units.BaseToMilli(velocity));
         }
 
-        public void DriveDirect(int leftVelocity, int rightVelocity)
+        public void DriveDirect(double leftVelocity, double rightVelocity)
         {
-            Console.WriteLine("Drive with a left wheel velocity of {0} mm/ms and a right wheel velocity of {1} mm/ms.", leftVelocity, rightVelocity);
+            Verify.ArgumentInRange(leftVelocity, CreateConstants.VelocityMin, CreateConstants.VelocityMax, "leftVelocity");
+            Verify.ArgumentInRange(rightVelocity, CreateConstants.VelocityMin, CreateConstants.VelocityMax, "rightVelocity");
+
+            Console.WriteLine("Drive with a left wheel velocity of {0} mm/s and a right wheel velocity of {1} mm/s.", (int)Units.BaseToMilli(leftVelocity), (int)Units.BaseToMilli(rightVelocity));
+        }
+
+        public void Spin(double velocity)
+        {
+            Verify.ArgumentInRange(velocity, CreateConstants.VelocityMin, CreateConstants.VelocityMax, "velocity");
+
+            Console.WriteLine("Spin with a velocity of {0} mm/s {1}clockwise.", Math.Abs((int)Units.BaseToMilli(velocity)), velocity < 0 ? "counter" : string.Empty);
+        }
+
+        public void SpinDistance(double velocity, int degrees)
+        {
+            Verify.ArgumentInRange(velocity, CreateConstants.VelocityMin, CreateConstants.VelocityMax, "velocity");
+
+            Console.WriteLine("Spin {0} degrees with a velocity of {1} mm/s {2}clockwise.", degrees, Math.Abs((int)Units.BaseToMilli(velocity)), velocity < 0 ? "counter" : string.Empty);
+        }
+
+        public void SpinTime(double velocity, double time)
+        {
+            Verify.ArgumentInRange(velocity, CreateConstants.VelocityMin, CreateConstants.VelocityMax, "velocity");
+
+            Console.WriteLine("Spin for {0} ms with a velocity of {1} mm/s {2}clockwise.", (int)Units.BaseToMilli(time), Math.Abs((int)Units.BaseToMilli(velocity)), velocity < 0 ? "counter" : string.Empty);
         }
 
         public void SetLed(Led led, bool onOff)
@@ -77,6 +116,9 @@ namespace AsimovClient.Create
 
         public void SetPowerLed(int color, int intensity)
         {
+            Verify.ArgumentInRange(color, CreateConstants.PowerLedColorMin, CreateConstants.PowerLedColorMax, "color");
+            Verify.ArgumentInRange(intensity, CreateConstants.PowerLedIntensityMin, CreateConstants.PowerLedIntensityMax, "intensity");
+
             Console.WriteLine("Set the Power LED to a color of {0} and an intensity of {1}.", color, intensity);
         }
 

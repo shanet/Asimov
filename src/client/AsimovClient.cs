@@ -55,7 +55,7 @@ namespace AsimovClient
         private static void OnPersonNotCentered(object sender, double angle)
         {
             //TODO: Turn a certain direction rather than a specific angle
-            roomba.Turn(1, 2, (int)angle);
+            roomba.SpinDistance(Math.Sign(angle) * CreateConstants.VelocityMax, (int)angle);
         }
     }
 }
