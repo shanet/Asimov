@@ -22,6 +22,8 @@ LIBS = -lbiscuit
 
 CFLAGS = -std=c99 -Wall -Wextra $(SRC_INCLUDE_DIRS) -DVERSION=$(VERSION)
 
+DEFINES = -D_POSIX_SOURCE
+
 DEBUG ?= 1
 ifeq ($(DEBUG), 1)
 	CFLAGS += -ggdb -DDEBUG
@@ -32,7 +34,7 @@ endif
 .PHONY = all install remove clean
 
 all: $(OBJECTS)
-	$(CC) -o bin/$(BINARY) $^ $(LIB_INCLUDE_DIRS) $(LIBS)
+	$(CC) $(DEFINES) -o bin/$(BINARY) $^ $(LIB_INCLUDE_DIRS) $(LIBS)
 
 install:
 	cp bin/$(BINARY) $(INSTALL_DIR)$(BINARY)
@@ -41,7 +43,7 @@ remove:
 	rm $(INSTALL_DIR)$(BINARY)
 
 .$(LANG).o:
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) $(DEFINES) -c $< -o $@
 
 clean:
 	rm -f $(OBJECTS)
