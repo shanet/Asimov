@@ -45,7 +45,10 @@
     <Compile Include="AsimovClient.cs" />
     <Compile Include="Create\ConsoleCreateController.cs" />
     <Compile Include="Create\CreateConstants.cs" />
+    <Compile Include="Create\CreateMode.cs" />
+    <Compile Include="Create\WaitEvent.cs" />
     <Compile Include="Create\ICreateController.cs" />
+    <Compile Include="Create\Led.cs" />
     <Compile Include="Helpers\Units.cs" />
     <Compile Include="Helpers\Verify.cs" />
     <Compile Include="Logging\AsimovLog.cs" />

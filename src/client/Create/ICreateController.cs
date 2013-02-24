@@ -6,43 +6,6 @@
 
 namespace AsimovClient.Create
 {
-    public enum CreateMode
-    {
-        /// <summary>
-        /// In Passive mode, you can read sensors, perform built-in demos, and charge the battery.
-        /// </summary>
-        Passive,
-
-        /// <summary>
-        /// Safe mode enables automatic reaction to cliff sensors, wheel-drop sensors, and charging sensors.
-        /// </summary>
-        Safe,
-
-        /// <summary>
-        /// Full mode gives you complete control over Create.
-        /// Full mode shuts off the cliff, wheel-drop, and internal charger safety features.
-        /// </summary>
-        Full
-    }
-
-    public enum Led
-    {
-        /// <summary>
-        /// The Power LED
-        /// </summary>
-        Power,
-
-        /// <summary>
-        /// The Advance LED
-        /// </summary>
-        Advance,
-
-        /// <summary>
-        /// The Play LED
-        /// </summary>
-        Play
-    }
-
     public interface ICreateController
     {
         #region Core
