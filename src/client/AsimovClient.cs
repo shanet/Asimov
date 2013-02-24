@@ -1,17 +1,61 @@
-﻿namespace AsimovClient
+﻿//------------------------------------------------------------------------------
+// <copyright file="AsimovClient.cs" company="Gage Ames">
+//     Copyright (c) Gage Ames.  All rights reserved.
+// </copyright>
+//------------------------------------------------------------------------------
+
+namespace AsimovClient
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-    using Roomba;
+    using System.Threading;
+    using Create;
+    using Logging;
+    using Microsoft.Kinect.Toolkit;
+    using Sensing;
 
     public class AsimovClient
     {
-        static void Main(string[] args)
+        private static ManualResetEvent endEvent;
+
+        private static ICreateController roomba;
+
+        private static KinectSensorChooser sensorChooser;
+
+        private static PersonLocator personLocator;
+
+        public static void Main(string[] args)
         {
-            RoombaController roomba = new RoombaController("127.0.0.1", 5000);
+            try
+            {
+                roomba = new ConsoleCreateController();                
+                endEvent = new ManualResetEvent(false);
+                sensorChooser = new KinectSensorChooser();
+                personLocator = new PersonLocator(sensorChooser);
+
+                // Subscribe to events that we need to handle
+                personLocator.OnPersonNotCentered += OnPersonNotCentered;
+                personLocator.OnPersonCentered += OnPersonCentered;
+
+                sensorChooser.Start();
+
+                endEvent.WaitOne();
+            }
+            catch (Exception e)
+            {
+                Console.Error.WriteLine("FATAL ERROR: {0}", e);
+                AsimovLog.WriteLine("FATAL ERROR: {0}", e);
+            }
+        }
+
+        private static void OnPersonCentered(object sender)
+        {
+            roomba.Stop();
+        }
+
+        private static void OnPersonNotCentered(object sender, double angle)
+        {
+            //TODO: Turn a certain direction rather than a specific angle
+            roomba.SpinDistance(Math.Sign(angle) * CreateConstants.VelocityMax, (int)angle);
         }
     }
 }

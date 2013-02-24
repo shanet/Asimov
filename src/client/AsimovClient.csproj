@@ -43,11 +43,27 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AsimovClient.cs" />
+    <Compile Include="Create\ConsoleCreateController.cs" />
+    <Compile Include="Create\CreateConstants.cs" />
+    <Compile Include="Create\CreateMode.cs" />
+    <Compile Include="Create\WaitEvent.cs" />
+    <Compile Include="Create\ICreateController.cs" />
+    <Compile Include="Create\Led.cs" />
+    <Compile Include="Helpers\Units.cs" />
+    <Compile Include="Helpers\Verify.cs" />
+    <Compile Include="Logging\AsimovLog.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Roomba\RoombaController.cs" />
+    <Compile Include="Create\TcpCreateController.cs" />
+    <Compile Include="Sensing\PersonLocator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\libs\Microsoft.Kinect.Toolkit\Microsoft.Kinect.Toolkit.csproj">
+      <Project>{c6f9c31b-6130-4443-a5cc-ef0664552ecd}</Project>
+      <Name>Microsoft.Kinect.Toolkit</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
