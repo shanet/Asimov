@@ -22,7 +22,7 @@ LIBS = -lbiscuit
 
 CFLAGS = -std=c99 -Wall -Wextra $(SRC_INCLUDE_DIRS) -DVERSION=$(VERSION)
 
-DEFINES = -D_POSIX_SOURCE
+DEFINES = -D_XOPEN_SOURCE=700 
 
 DEBUG ?= 1
 ifeq ($(DEBUG), 1)
