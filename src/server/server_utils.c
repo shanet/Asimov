@@ -3,7 +3,7 @@
 int sendToClient(const char *msg) {
     // Add a newline to the end of the message
     int msgLen = strlen(msg);
-    char *newlineMsg = malloc(msgLen + 1);
+    char *newlineMsg = malloc(msgLen + 2);
     strncpy(newlineMsg, msg, msgLen);
     newlineMsg[msgLen] = '\n';
     newlineMsg[msgLen+1] = '\0';
@@ -53,6 +53,9 @@ void stopServer(void) {
 
     close(clientSocket);
     close(listenSocket);
+
+    freeaddrinfo(serverInfo);
+    serverInfo = NULL;
 }
 
 

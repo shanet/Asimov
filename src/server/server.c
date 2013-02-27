@@ -37,20 +37,18 @@ int acceptConnection(void) {
 
         int pid = fork();
         if(pid == 0) {
-            //uninstallSignalHandlers();
-
             // Get the hello from the client and tell the client we're ready
             char reply[BUFFER];
             int recvStatus = recvFromClient(reply);
             if(recvStatus == NETWORK_ERR || recvStatus == 0 || strcmp(reply, PROT_HELO) != 0 || sendToClient(PROT_REDY) == NETWORK_ERR) {
                 if(verbosity > NO_VERBOSE) fprintf(stderr, "%s: Failed handshake with client.\n", prog);
-                exit(ABNORMAL_EXIT);
+                serverExit(ABNORMAL_EXIT);
             }
 
             if(verbosity > NO_VERBOSE) printf("%s: Completed handshake with client.\n", prog);
 
             handleConnection();
-            return ERR; // This should never return, but to make gcc stop showing a warning, it's here
+            return ERR; // handleConnection() should never return, but to make gcc stop showing a warning, it's here
         } else if(pid != -1) {
             childPid = pid;
             return SUCCESS;
@@ -106,7 +104,7 @@ void handleConnection() {
     }
 
     if(verbosity > NO_VERBOSE) printf("%s: Ending connection with client.\n", prog);
-    exit(NORMAL_EXIT);
+    serverExit(NORMAL_EXIT);
 }
 
 

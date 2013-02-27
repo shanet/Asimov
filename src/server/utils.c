@@ -83,21 +83,21 @@ void installSignalHandlers(void) {
 
 void signalHandler(const int signal) {
     if(signal == SIGINT || signal == SIGTERM) {
-        close(clientSocket);
-
-        if(getpid() != childPid) {
-            stopServer();
-        }
-        exit(NORMAL_EXIT);
+        serverExit(NORMAL_EXIT);
     } else if(signal == SIGCHLD) {
         // When the child returns, set the child pid back to no child so a new client can be accepted
-        int ret;
-        pid_t returned_child = wait(&ret);
+        pid_t returned_child = wait(NULL);
         if(returned_child == childPid) {
             close(clientSocket);
             childPid = NO_CHILD;
         }
     }
+}
+
+
+void serverExit(int returnCode) {
+    stopServer();
+    exit(returnCode);
 }
 
 

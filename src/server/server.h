@@ -109,5 +109,6 @@ void installSignalHandlers(void);
 void signalHandler(const int signal);
 void connectToDevice(void);
 void processCmdLineArgs(int argc, char **argv);
+void serverExit(int returnCode);
 void printVersion(void);
 void printHelp(void);
