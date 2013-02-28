@@ -10,16 +10,6 @@ namespace AsimovClient.Create
     {
         #region Core
         /// <summary>
-        /// Turns on the Create and puts it in safe mode.
-        /// </summary>
-        void PowerOn();
-
-        /// <summary>
-        /// Turns off the Create.
-        /// </summary>
-        void PowerOff();
-
-        /// <summary>
         /// Sets the mode of the Create to <paramref name="mode"/>.
         /// </summary>
         /// <param name="mode">Mode in which to put the Create.</param>

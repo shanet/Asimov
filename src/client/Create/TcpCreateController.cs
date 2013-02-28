@@ -62,18 +62,6 @@ namespace AsimovClient.Create
             this.client.Close();
         }
 
-        public void PowerOn()
-        {
-            //TODO: This needs defined in the protocol
-            throw new NotImplementedException();
-        }
-
-        public void PowerOff()
-        {
-            //TODO: This needs defined in the protocol
-            throw new NotImplementedException();
-        }
-
         public void SetMode(CreateMode mode)
         {
             this.ExecuteCommand("MODE {0}", mode.ToString().ToUpper());

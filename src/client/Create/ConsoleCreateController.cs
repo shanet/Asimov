@@ -11,16 +11,6 @@ namespace AsimovClient.Create
 
     public class ConsoleCreateController : ICreateController
     {
-        public void PowerOn()
-        {
-            Console.WriteLine("Power on.");
-        }
-
-        public void PowerOff()
-        {
-            Console.WriteLine("Power off.");
-        }
-
         public void SetMode(CreateMode mode)
         {
             Console.WriteLine("Mode set to {0}.", mode);
