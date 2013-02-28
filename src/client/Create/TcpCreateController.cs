@@ -139,11 +139,11 @@ namespace AsimovClient.Create
             this.ExecuteCommand("DRIVE SPIN NORMAL {0}", (int)Units.BaseToMilli(velocity));
         }
 
-        public void SpinDistance(double velocity, int degrees)
+        public void SpinAngle(double velocity, int degrees)
         {
             Verify.ArgumentInRange(velocity, CreateConstants.VelocityMin, CreateConstants.VelocityMax, "velocity");
 
-            this.ExecuteCommand("DRIVE SPIN DISTANCE {0} {1}", (int)Units.BaseToMilli(velocity), degrees);
+            this.ExecuteCommand("DRIVE SPIN ANGLE {0} {1}", (int)Units.BaseToMilli(velocity), degrees);
         }
 
         public void SpinTime(double velocity, double time)

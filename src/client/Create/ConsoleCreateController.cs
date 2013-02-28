@@ -95,7 +95,7 @@ namespace AsimovClient.Create
             Console.WriteLine("Spin with a velocity of {0} mm/s {1}clockwise.", Math.Abs((int)Units.BaseToMilli(velocity)), velocity < 0 ? "counter" : string.Empty);
         }
 
-        public void SpinDistance(double velocity, int degrees)
+        public void SpinAngle(double velocity, int degrees)
         {
             Verify.ArgumentInRange(velocity, CreateConstants.VelocityMin, CreateConstants.VelocityMax, "velocity");
 

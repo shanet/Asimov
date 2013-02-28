@@ -88,7 +88,7 @@ namespace AsimovClient.Create
         /// </summary>
         /// <param name="velocity">Velocity at which to turn in meters/second (use a negative velocity to spin counterclockwise). [-0.5, 0.5]</param>
         /// <param name="degrees">Degrees to turn.</param>
-        void SpinDistance(double velocity, int degrees);
+        void SpinAngle(double velocity, int degrees);
 
         /// <summary>
         /// Spin the Create in place clockwise at the given velocity for the given number of seconds.
