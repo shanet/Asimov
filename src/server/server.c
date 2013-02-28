@@ -122,66 +122,213 @@ int processProtocolCommand(char *command) {
     } else if(strcmp(arg, PROT_MODE) == 0) {
         return processModeCommand();
     } else if(strcmp(arg, PROT_BEEP) == 0) {
-        biscBeep();
-        return SUCCESS;
+        return (biscBeep() == BISC_SUCCESS ? SUCCESS : ERR); 
     } else {
         return ERR;
     }
 }
 
 
+char* getNextArg(void) {
+    return strtok(NULL, " ");
+}
+
+
 int processDriveCommand(void) {
-    char *arg = strtok(NULL, " ");
+    char *arg = getNextArg();
+    if(arg == NULL) return ERR;
 
-    while(arg != NULL) {
-        arg = strtok(NULL, " ");
+    // DRIVE NORMAL
+    if(strcmp(arg, PROT_DRIVE_NORMAL) == 0) {
+        arg = getNextArg();
+        if(arg == NULL) return ERR;
+        int velocity = atoi(arg);
+
+        arg = getNextArg();
+        if(arg == NULL) return ERR;
+        int radius = atoi(arg);
+
+        return (biscDrive(velocity, radius) == BISC_SUCCESS ? SUCCESS : ERR); 
+    // DRIVE TIME/DISTANCE
+    } else if(strcmp(arg, PROT_DRIVE_TIME) == 0 || strcmp(arg, PROT_DRIVE_DISTANCE) == 0) {
+        int driveType;
+        if(strcmp(arg, PROT_DRIVE_TIME) == 0) {
+            driveType = 1;
+        } else {
+            driveType = 2;
+        }
+
+        arg = getNextArg();
+        if(arg == NULL) return ERR;
+        int velocity = atoi(arg);
+
+        arg = getNextArg();
+        if(arg == NULL) return ERR;
+        int radius = atoi(arg);
+
+        arg = getNextArg();
+        if(arg == NULL) return ERR;
+        int waitArg = atoi(arg);
+
+        if(driveType == 1) {
+            return (biscTimedDrive(velocity, radius, waitArg) == BISC_SUCCESS ? SUCCESS : ERR); 
+        } else {
+            return (biscDriveDistance(velocity, radius, waitArg) == BISC_SUCCESS ? SUCCESS : ERR);
+        }
+    // DRIVE STRAIGHT
+    } else if(strcmp(arg, PROT_DRIVE_STRAIGHT) == 0) {
+        // TODO
+    // DRIVE DIRECT
+    } else if(strcmp(arg, PROT_DRIVE_DIRECT) == 0) {
+        arg = getNextArg();
+        if(arg == NULL) return ERR;
+        int rightVelocity = atoi(arg);
+
+        arg = getNextArg();
+        if(arg == NULL) return ERR;
+        int leftVelocity = atoi(arg);
+
+        return (biscDriveDirect(rightVelocity, leftVelocity) == BISC_SUCCESS ? SUCCESS : ERR); 
+    // DRIVE SPIN
+    } else if(strcmp(arg, PROT_DRIVE_SPIN) == 0) {
+        // TODO
+    // DRIVE STOP
+    } else if(strcmp(arg, PROT_DRIVE_STOP) == 0) {
+        return (biscDriveStop() == BISC_SUCCESS ? SUCCESS : ERR);
+    } else {
+        return ERR;
     }
-
-    return SUCCESS;
 }
 
 
 int processLedCommand(void) {
-    char *arg = strtok(NULL, " ");
+    char *arg = getNextArg();
+    if(arg == NULL) return ERR;
 
-    while(arg != NULL) {
-        arg = strtok(NULL, " ");
+    // LED ADVANCE
+    if(strcmp(arg, PROT_LED_ADVANCE) == 0) {
+        arg = getNextArg();
+        if(arg == NULL) return ERR;
+
+        // LED ADVANCE ON
+        if(strcmp(arg, PROT_LED_ON) == 0) {
+            return (biscTurnOnAdvanceLed() == BISC_SUCCESS ? SUCCESS : ERR); 
+        // LED ADVANCE OFF
+        } else if(strcmp(arg, PROT_LED_OFF) == 0) {
+            return (biscTurnOffAdvanceLed() == BISC_SUCCESS ? SUCCESS : ERR); 
+        }
+    // LED PLAY
+    } else if(strcmp(arg, PROT_LED_PLAY) == 0) {
+        arg = getNextArg();
+        if(arg == NULL) return ERR;
+
+        // LED PLAY ON
+        if(strcmp(arg, PROT_LED_ON) == 0) {
+            return (biscTurnOnPlayLed() == BISC_SUCCESS ? SUCCESS : ERR); 
+        //LED PLAY OFF
+        } else if(strcmp(arg, PROT_LED_OFF) == 0) {
+            return (biscTurnOffPlayLed() == BISC_SUCCESS ? SUCCESS : ERR); 
+        }
+    // LED POWER
+    } else if(strcmp(arg, PROT_LED_POWER) == 0) {
+        arg = getNextArg();
+        if(arg == NULL) return ERR;
+
+        // LED POWER OFF
+        if(strcmp(arg, PROT_LED_OFF) == 0) {
+            return (biscTurnOffPowerLed() == BISC_SUCCESS ? SUCCESS : ERR); 
+        // LED POWER [color] [intensity]
+        } else {
+            arg = getNextArg();
+            if(arg == NULL) return ERR;
+            int color = atoi(arg);
+
+            arg = getNextArg();
+            if(arg == NULL) return ERR;
+            int intensity = atoi(arg);
+
+            return (biscSetPowerLed(color, intensity) == BISC_SUCCESS ? SUCCESS : ERR); 
+        }
+    // LED FLASH
+    } else if(strcmp(arg, PROT_LED_FLASH) == 0) {
+        arg = getNextArg();
+        if(arg == NULL) return ERR;
+
+        int led;
+        if(strcmp(arg, PROT_LED_POWER) == 0) {
+            led = BISC_POWER_LED;
+        } else if(strcmp(arg, PROT_LED_ADVANCE) == 0) {
+            led = BISC_ADVANCE_LED;
+        } else if(strcmp(arg, PROT_LED_PLAY) == 0) {
+            led = BISC_PLAY_LED;
+        } else {
+            return ERR;
+        }
+
+        arg = getNextArg();
+        if(arg == NULL) return ERR;
+        int numFlashes = atoi(arg);
+
+        arg = getNextArg();
+        if(arg == NULL) return ERR;
+        int flashDuration = atoi(arg);
+
+        return (biscFlashLed(led, numFlashes, flashDuration) == BISC_SUCCESS ? SUCCESS : ERR); 
     }
 
-    return SUCCESS;
+    return ERR;
 }
 
 
 int processSongCommand(void) {
-    char *arg = strtok(NULL, " ");
-
-    while(arg != NULL) {
-        arg = strtok(NULL, " ");
-    }
-
+    // TODO
     return SUCCESS;
 }
 
 
 int processWaitCommand(void) {
-    char *arg = strtok(NULL, " ");
+    char *arg = getNextArg();
+    if(arg == NULL) return ERR;
 
-    while(arg != NULL) {
-        arg = strtok(NULL, " ");
+    char *waitType = strdup(arg);
+    if(waitType == NULL) return ERR;
+
+    arg = getNextArg();
+    if(arg == NULL) return ERR;
+    int waitArg = atoi(arg);    
+    
+    // WAIT TIME/DISTANCE/ANGLE/EVENT [arg]
+    if(strcmp(waitType, PROT_WAIT_TIME) == 0) {
+        return (biscWaitTime(waitArg) == BISC_SUCCESS ? SUCCESS : ERR); 
+    } else if(strcmp(waitType, PROT_WAIT_DISTANCE) == 0) {
+        return (biscWaitDistance(waitArg) == BISC_SUCCESS ? SUCCESS : ERR); 
+    } else if(strcmp(waitType, PROT_WAIT_ANGLE) == 0) {
+        return (biscWaitAngle(waitArg) == BISC_SUCCESS ? SUCCESS : ERR); 
+    } else if(strcmp(waitType, PROT_WAIT_EVENT) == 0) {
+        return (biscWaitEvent(waitArg) == BISC_SUCCESS ? SUCCESS : ERR); 
+    } else {
+        return ERR;
     }
-
-    return SUCCESS;
 }
 
 
 int processModeCommand(void) {
-    char *arg = strtok(NULL, " ");
+    char *arg = getNextArg();
+    if(arg == NULL) return ERR;
 
-    while(arg != NULL) {
-        arg = strtok(NULL, " ");
+    // MODE FULL/SAFE/PASSIVE
+    int mode;
+    if(strcmp(arg, PROT_MODE_FULL) == 0) {
+        mode = BISC_MODE_FULL;
+    } else if(strcmp(arg, PROT_MODE_SAFE) == 0) {
+        mode = BISC_MODE_SAFE;
+    } else if(strcmp(arg, PROT_MODE_PASSIVE) == 0) {
+        mode = BISC_MODE_PASSIVE;
+    } else {
+        return ERR;
     }
 
-    return SUCCESS;
+    return (biscChangeMode(mode) == BISC_SUCCESS ? SUCCESS : ERR); 
 }
 
 

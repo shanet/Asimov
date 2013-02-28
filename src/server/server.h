@@ -96,6 +96,7 @@ int acceptConnection(void);
 void handleConnection(void);
 void commandLoop(void);
 int processProtocolCommand(char *command);
+char* getNextArg(void);
 char* getClientIpAddress(void);
 
 int processDriveCommand(void);
