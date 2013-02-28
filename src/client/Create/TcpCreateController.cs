@@ -91,7 +91,7 @@ namespace AsimovClient.Create
         {
             Verify.ArgumentInRange(velocity, CreateConstants.VelocityMin, CreateConstants.VelocityMax, "velocity");
 
-            this.ExecuteCommand("DRIVE STRAIGHT {0}", (int)Units.BaseToMilli(velocity));
+            this.ExecuteCommand("DRIVE STRAIGHT NORMAL {0}", (int)Units.BaseToMilli(velocity));
         }
 
         public void DriveDistance(double velocity, double radius, double distance)
@@ -136,7 +136,7 @@ namespace AsimovClient.Create
         {
             Verify.ArgumentInRange(velocity, CreateConstants.VelocityMin, CreateConstants.VelocityMax, "velocity");
 
-            this.ExecuteCommand("DRIVE SPIN DIRECT {0}", (int)Units.BaseToMilli(velocity));
+            this.ExecuteCommand("DRIVE SPIN NORMAL {0}", (int)Units.BaseToMilli(velocity));
         }
 
         public void SpinDistance(double velocity, int degrees)
