@@ -177,7 +177,35 @@ int processDriveCommand(void) {
         }
     // DRIVE STRAIGHT
     } else if(strcmp(arg, PROT_DRIVE_STRAIGHT) == 0) {
-        // TODO
+        int driveType;
+        if(strcmp(arg, PROT_DRIVE_NORMAL) == 0) {
+            driveType = 1;
+        } else if(strcmp(arg, PROT_DRIVE_TIME) == 0) {
+            driveType = 2;
+        } else if(strcmp(arg, PROT_DRIVE_DISTANCE) == 0) {
+            driveType = 3;
+        } else {
+           return ERR;
+        }
+
+        arg = getNextArg();
+        if(arg == NULL) return ERR;
+        int velocity = atoi(arg);
+
+        int waitArg;
+        if(driveType == 2 || driveType == 3) {
+           arg = getNextArg();
+           if(arg == NULL) return ERR;
+           waitArg = atoi(arg);
+        }
+
+        if(driveType == 1) {
+            return (biscDriveStraight(velocity) == BISC_SUCCESS ? SUCCESS : ERR);
+        } else if(driveType == 2) {
+            return (biscTimedDriveStraight(velocity, waitArg) == BISC_SUCCESS ? SUCCESS : ERR);
+        } else {
+            return (biscDriveDistanceStraight(velocity, waitArg) == BISC_SUCCESS ? SUCCESS : ERR);
+        }
     // DRIVE DIRECT
     } else if(strcmp(arg, PROT_DRIVE_DIRECT) == 0) {
         arg = getNextArg();
@@ -188,10 +216,38 @@ int processDriveCommand(void) {
         if(arg == NULL) return ERR;
         int leftVelocity = atoi(arg);
 
-        return (biscDriveDirect(rightVelocity, leftVelocity) == BISC_SUCCESS ? SUCCESS : ERR); 
+        return (biscDirectDrive(rightVelocity, leftVelocity) == BISC_SUCCESS ? SUCCESS : ERR); 
     // DRIVE SPIN
     } else if(strcmp(arg, PROT_DRIVE_SPIN) == 0) {
-        // TODO
+        int spinType;
+        if(strcmp(arg, PROT_DRIVE_NORMAL) == 0) {
+            spinType = 1;
+        } else if(strcmp(arg, PROT_DRIVE_TIME) == 0) {
+            spinType = 2;
+        } else if(strcmp(arg, PROT_DRIVE_ANGLE) == 0) {
+            spinType = 3;
+        } else {
+           return ERR;
+        }
+
+        arg = getNextArg();
+        if(arg == NULL) return ERR;
+        int velocity = atoi(arg);
+
+        int waitArg;
+        if(spinType == 2 || spinType == 3) {
+           arg = getNextArg();
+           if(arg == NULL) return ERR;
+           waitArg = atoi(arg);
+        }
+
+        if(spinType == 1) {
+            return (biscSpin(velocity) == BISC_SUCCESS ? SUCCESS : ERR);
+        } else if(spinType == 2) {
+            return (biscTimedSpin(velocity, waitArg) == BISC_SUCCESS ? SUCCESS : ERR);
+        } else {
+            return (biscSpinDegrees(velocity, waitArg) == BISC_SUCCESS ? SUCCESS : ERR);
+        }
     // DRIVE STOP
     } else if(strcmp(arg, PROT_DRIVE_STOP) == 0) {
         return (biscDriveStop() == BISC_SUCCESS ? SUCCESS : ERR);

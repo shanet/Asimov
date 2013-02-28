@@ -43,6 +43,7 @@
     #define PROT_DRIVE_NORMAL   "NORMAL"
     #define PROT_DRIVE_TIME     "TIME"
     #define PROT_DRIVE_DISTANCE "DISTANCE"
+    #define PROT_DRIVE_ANGLE    "ANGLE"
     #define PROT_DRIVE_STRAIGHT "STRAIGHT"
     #define PROT_DRIVE_DIRECT   "DIRECT"
     #define PROT_DRIVE_SPIN     "SPIN"
