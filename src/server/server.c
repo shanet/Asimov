@@ -351,28 +351,34 @@ int processSongCommand(void) {
         char *unparsedDurations = getNextArg();
         if(unparsedDurations == NULL) return ERR;
 
-        int songLen;
         unsigned char notes[BISC_MAX_SONG_LEN];
         unsigned char durations[BISC_MAX_SONG_LEN];
 
         char *note = strtok(unparsedNotes, ",");
         if(note == NULL) return ERR;
 
+        int notesLen = 0;
         while(note != NULL) {
-            notes[songLen] = note[0];
-            songLen++;
+            notes[notesLen] = note[0];
+            notesLen++;
             note = strtok(NULL, ",");
         }
 
         char *duration = strtok(unparsedDurations, ",");
         if(duration == NULL) return ERR;
 
+        int durationsLen = 0;
         while(duration != NULL) {
-            durations[songLen] = duration[0];
+            durations[durationsLen] = duration[0];
+            durationsLen++;
             duration = strtok(NULL, ",");
         }
 
-        return (biscDefineSong((char)songNum, notes, durations, songLen) == BISC_SUCCESS ? SUCCESS : ERR);
+        if(notesLen != durationsLen) {
+            return ERR;
+        }
+
+        return (biscDefineSong((char)songNum, notes, durations, notesLen) == BISC_SUCCESS ? SUCCESS : ERR);
     } else if(strcmp(arg, PROT_SONG_PLAY) == 0) {
         arg = getNextArg();
         if(arg == NULL) return ERR;
