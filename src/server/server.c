@@ -345,35 +345,34 @@ int processSongCommand(void) {
         if(arg == NULL) return ERR;
         int songNum = atoi(arg);
 
-        arg = getNextArg();
-        if(arg == NULL) return ERR;
-        int songLen = atoi(arg);
+        // The notes and durations are in a CSV list. They need parsed separately.
+        char *unparsedNotes = getNextArg();
+        if(unparsedNotes == NULL) return ERR;
+        char *unparsedDurations = getNextArg();
+        if(unparsedDurations == NULL) return ERR;
 
-        unsigned char *notes     = malloc(songLen);
-        unsigned char *durations = malloc(songLen);
+        int songLen;
+        unsigned char notes[BISC_MAX_SONG_LEN];
+        unsigned char durations[BISC_MAX_SONG_LEN];
 
-        arg = getNextArg();
-        if(arg == NULL) return ERR;
-        for(int i=0; i<songLen; i++) {
-            notes[i] = atoi(arg);
+        char *note = strtok(unparsedNotes, ",");
+        if(note == NULL) return ERR;
 
-            arg = getNextArg();
-            if(arg == NULL) return ERR;
+        while(note != NULL) {
+            notes[songLen] = note[0];
+            songLen++;
+            note = strtok(NULL, ",");
         }
 
-        for(int i=0; i<songLen; i++) {
-            durations[i] = atoi(arg);
+        char *duration = strtok(unparsedDurations, ",");
+        if(duration == NULL) return ERR;
 
-            arg = getNextArg();
-            if(arg == NULL) return ERR;
+        while(duration != NULL) {
+            durations[songLen] = duration[0];
+            duration = strtok(NULL, ",");
         }
 
-        int ret = biscDefineSong((char)songNum, notes, durations, songLen);
-
-        free(notes);
-        free(durations);
-
-        return (ret == BISC_SUCCESS ? SUCCESS : ERR);
+        return (biscDefineSong((char)songNum, notes, durations, songLen) == BISC_SUCCESS ? SUCCESS : ERR);
     } else if(strcmp(arg, PROT_SONG_PLAY) == 0) {
         arg = getNextArg();
         if(arg == NULL) return ERR;
