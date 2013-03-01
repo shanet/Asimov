@@ -123,9 +123,9 @@ int processProtocolCommand(char *command) {
         return processModeCommand();
     } else if(strcmp(arg, PROT_BEEP) == 0) {
         return (biscBeep() == BISC_SUCCESS ? SUCCESS : ERR); 
-    } else {
-        return ERR;
     }
+
+    return ERR;
 }
 
 
@@ -246,14 +246,14 @@ int processDriveCommand(void) {
         } else if(spinType == 2) {
             return (biscTimedSpin(velocity, waitArg) == BISC_SUCCESS ? SUCCESS : ERR);
         } else {
-            return (biscSpinDegrees(velocity, waitArg) == BISC_SUCCESS ? SUCCESS : ERR);
+            return (biscSpinAngle(velocity, waitArg) == BISC_SUCCESS ? SUCCESS : ERR);
         }
     // DRIVE STOP
     } else if(strcmp(arg, PROT_DRIVE_STOP) == 0) {
         return (biscDriveStop() == BISC_SUCCESS ? SUCCESS : ERR);
-    } else {
-        return ERR;
     }
+
+    return ERR;
 }
 
 
@@ -337,8 +337,52 @@ int processLedCommand(void) {
 
 
 int processSongCommand(void) {
-    // TODO
-    return SUCCESS;
+    char *arg = getNextArg();
+    if(arg == NULL) return ERR;
+
+    if(strcmp(arg, PROT_SONG_DEFINE) == 0) {
+        arg = getNextArg();
+        if(arg == NULL) return ERR;
+        int songNum = atoi(arg);
+
+        arg = getNextArg();
+        if(arg == NULL) return ERR;
+        int songLen = atoi(arg);
+
+        unsigned char *notes     = malloc(songLen);
+        unsigned char *durations = malloc(songLen);
+
+        arg = getNextArg();
+        if(arg == NULL) return ERR;
+        for(int i=0; i<songLen; i++) {
+            notes[i] = atoi(arg);
+
+            arg = getNextArg();
+            if(arg == NULL) return ERR;
+        }
+
+        for(int i=0; i<songLen; i++) {
+            durations[i] = atoi(arg);
+
+            arg = getNextArg();
+            if(arg == NULL) return ERR;
+        }
+
+        int ret = biscDefineSong((char)songNum, notes, durations, songLen);
+
+        free(notes);
+        free(durations);
+
+        return (ret == BISC_SUCCESS ? SUCCESS : ERR);
+    } else if(strcmp(arg, PROT_SONG_PLAY) == 0) {
+        arg = getNextArg();
+        if(arg == NULL) return ERR;
+        int songNum = atoi(arg);
+
+        return (biscPlaySong(songNum) == BISC_SUCCESS ? SUCCESS : ERR);
+    }
+
+    return ERR;
 }
 
 
@@ -362,9 +406,9 @@ int processWaitCommand(void) {
         return (biscWaitAngle(waitArg) == BISC_SUCCESS ? SUCCESS : ERR); 
     } else if(strcmp(waitType, PROT_WAIT_EVENT) == 0) {
         return (biscWaitEvent(waitArg) == BISC_SUCCESS ? SUCCESS : ERR); 
-    } else {
-        return ERR;
     }
+
+    return ERR;
 }
 
 
