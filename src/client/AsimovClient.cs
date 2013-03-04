@@ -27,7 +27,7 @@ namespace AsimovClient
         {
             try
             {
-                roomba = new ConsoleCreateController();                
+                roomba = new AsimovController(new ConsoleCreateCommunicator());                
                 endEvent = new ManualResetEvent(false);
                 sensorChooser = new KinectSensorChooser();
                 personLocator = new PersonLocator(sensorChooser);

@@ -43,9 +43,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AsimovClient.cs" />
-    <Compile Include="Create\ConsoleCreateController.cs" />
+    <Compile Include="Create\AsimovController.cs" />
+    <Compile Include="Create\ConsoleCreateCommunicator.cs" />
     <Compile Include="Create\CreateConstants.cs" />
     <Compile Include="Create\CreateMode.cs" />
+    <Compile Include="Create\ICreateCommunicator.cs" />
+    <Compile Include="Create\TcpCreateCommunicator.cs" />
     <Compile Include="Create\WaitEvent.cs" />
     <Compile Include="Create\ICreateController.cs" />
     <Compile Include="Create\Led.cs" />
@@ -53,7 +56,6 @@
     <Compile Include="Helpers\Verify.cs" />
     <Compile Include="Logging\AsimovLog.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Create\TcpCreateController.cs" />
     <Compile Include="Sensing\PersonLocator.cs" />
   </ItemGroup>
   <ItemGroup>

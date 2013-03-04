@@ -7,10 +7,19 @@
 namespace AsimovClient.Helpers
 {
     using System;
+    using System.Data;
 
     public static class Verify
     {
         public const string DefaultParamName = "Parameter";
+
+        public static void ArgumentNotNull(object argument, string paramName = DefaultParamName)
+        {
+            if (argument == null)
+            {
+                throw new ArgumentNullException(string.Format("{0} cannot be null.", paramName), paramName);
+            }
+        }
 
         public static void ArgumentAtLeast(IComparable argument, IComparable minimum, string paramName = DefaultParamName)
         {
