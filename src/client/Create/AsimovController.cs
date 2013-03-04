@@ -77,6 +77,7 @@ namespace AsimovClient.Create
         {
             Verify.ArgumentInRange(velocity, CreateConstants.VelocityMin, CreateConstants.VelocityMax, "velocity");
             Verify.ArgumentInRange(radius, CreateConstants.RadiusMin, CreateConstants.RadiusMax, "radius");
+            Verify.ArgumentAtLeast(time, CreateConstants.TimeMin, "time");
 
             AsimovLog.WriteLine("Driving for {0} ms at {1} mm/s with radius {2} mm.", (int)Units.BaseToMilli(time), (int)Units.BaseToMilli(velocity), (int)Units.BaseToMilli(radius));
 
@@ -86,6 +87,7 @@ namespace AsimovClient.Create
         public void DriveTime(double velocity, double time)
         {
             Verify.ArgumentInRange(velocity, CreateConstants.VelocityMin, CreateConstants.VelocityMax, "velocity");
+            Verify.ArgumentAtLeast(time, CreateConstants.TimeMin, "time");
 
             AsimovLog.WriteLine("Driving straight for {0} ms at {1} mm/s.", (int)Units.BaseToMilli(time), (int)Units.BaseToMilli(velocity));
 
@@ -126,6 +128,7 @@ namespace AsimovClient.Create
         public void SpinTime(double velocity, double time)
         {
             Verify.ArgumentInRange(velocity, CreateConstants.VelocityMin, CreateConstants.VelocityMax, "velocity");
+            Verify.ArgumentAtLeast(time, CreateConstants.TimeMin, "time");
 
             AsimovLog.WriteLine("Spinning for {0} ms with a velocity of {1} mm/s {2}clockwise.", (int)Units.BaseToMilli(time), Math.Abs((int)Units.BaseToMilli(velocity)), velocity < 0 ? "counter" : string.Empty);
 
@@ -193,6 +196,8 @@ namespace AsimovClient.Create
 
         public void WaitTime(double time)
         {
+            Verify.ArgumentAtLeast(time, CreateConstants.TimeMin, "time");
+
             AsimovLog.WriteLine("Waiting for {0} ms.", (int)Units.BaseToMilli(time));
 
             this.communicator.ExecuteCommand("WAIT TIME {0}", (int)Units.BaseToMilli(time));

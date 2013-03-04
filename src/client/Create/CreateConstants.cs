@@ -9,6 +9,11 @@ namespace AsimovClient.Create
     public static class CreateConstants
     {
         /// <summary>
+        /// Minimum time in milliseconds.
+        /// </summary>
+        public const double TimeMin = 0.0;
+
+        /// <summary>
         /// Minimum velocity in meters/second.
         /// </summary>
         public const double VelocityMin = -0.5;
