@@ -1,11 +1,11 @@
-﻿namespace ClientDebugger
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
+﻿//------------------------------------------------------------------------------
+// <copyright file="DriveProperties.cs" company="Gage Ames">
+//     Copyright (c) Gage Ames.  All rights reserved.
+// </copyright>
+//------------------------------------------------------------------------------
 
+namespace ClientDebugger
+{
     public class DriveProperties
     {
         public bool IsIndefinate { get; set; }
