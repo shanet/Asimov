@@ -1,0 +1,58 @@
+﻿<Window x:Class="ClientDebugger.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:src="clr-namespace:ClientDebugger"
+        Title="Asimov Client Debugger" Height="265" Width="460">
+    <Window.Resources>
+        <src:DriveProperties x:Key="DriveSettings" IsIndefinate="True" IsRadius="True"/>
+        <Style x:Key="TextBoxStyle" TargetType="{x:Type TextBox}">
+            <Setter Property="Width" Value="45"/>
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <GroupBox x:Name="DriveGroupBox" Header="Drive" HorizontalAlignment="Center" Margin="10,10,10,10" VerticalAlignment="Top">
+            <Grid Width="429">
+                <GroupBox x:Name="DriveModeGroupBox" Header="Mode" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="169" Width="210" >
+                    <WrapPanel Margin="5,5,5,5">
+                        <RadioButton x:Name="IndefinateRadioButton" Content="Indefinate" GroupName="ModeGroup" IsChecked="{Binding Source={StaticResource DriveSettings}, Path=IsIndefinate, Mode=TwoWay}" />
+                        <WrapPanel Margin="0,8,0,0">
+                            <RadioButton x:Name="DistanceRadioButton" Content="Distance" VerticalContentAlignment="Center" GroupName="ModeGroup" IsChecked="{Binding Source={StaticResource DriveSettings}, Path=IsDistance, Mode=TwoWay}" Checked="DistanceRadioButton_Checked" Unchecked="DistanceRadioButton_Unchecked"/>
+                            <TextBox x:Name="DistanceTextBox" Margin="10,0,0,0" Style="{DynamicResource TextBoxStyle}" Text="{Binding Source={StaticResource DriveSettings}, Path=Distance, Mode=TwoWay}" IsEnabled="False"/>
+                            <Label Content="m" />
+                        </WrapPanel>
+                        <WrapPanel Margin="0,8,0,0">
+                            <RadioButton x:Name="AngleRadioButton" Content="Angle"  VerticalContentAlignment="Center" GroupName="ModeGroup" IsChecked="{Binding Source={StaticResource DriveSettings}, Path=IsAngle, Mode=TwoWay}" Checked="AngleRadioButton_OnChecked" Unchecked="AngleRadioButton_Unchecked"/>
+                            <TextBox x:Name="AngleTextBox" Margin="25,0,0,0" Style="{DynamicResource TextBoxStyle}" Text="{Binding Source={StaticResource DriveSettings}, Path=Angle, Mode=TwoWay}" IsEnabled="False" />
+                            <Label Content="deg" />
+                        </WrapPanel>
+                        <WrapPanel Margin="0,8,0,0">
+                            <RadioButton x:Name="TimeRadioButton" Content="Time"  VerticalContentAlignment="Center" GroupName="ModeGroup" IsChecked="{Binding Source={StaticResource DriveSettings}, Path=IsTime, Mode=TwoWay}" Unchecked="TimeRadioButton_Unchecked" Checked="TimeRadioButton_Checked"/>
+                            <TextBox x:Name="TimeTextBox" Margin="30,0,0,0" Style="{DynamicResource TextBoxStyle}" Text="{Binding Source={StaticResource DriveSettings}, Path=Time, Mode=TwoWay}" IsEnabled="False" />
+                            <Label Content="ms" />
+                        </WrapPanel>
+                    </WrapPanel>
+                </GroupBox>
+                <GroupBox x:Name="DriveVelocityGroupBox" Header="Velocity" HorizontalAlignment="Left" Margin="225,10,0,0" VerticalAlignment="Top" Height="60" Width="113">
+                    <WrapPanel Margin="5,5,5,5">
+                        <TextBox x:Name="VelocityTextBox" Style="{DynamicResource TextBoxStyle}" Text="{Binding Source={StaticResource DriveSettings}, Path=Velocity, Mode=TwoWay}" />
+                        <Label Content="m/s" />
+                    </WrapPanel>
+                </GroupBox>
+                <GroupBox x:Name="DriveRadiusGroupBox" Header="Radius" HorizontalAlignment="Left" Margin="226,75,0,0" VerticalAlignment="Top" Height="104" Width="112">
+                    <WrapPanel Margin="5,5,5,5">
+                        <WrapPanel>
+                            <RadioButton x:Name="RadiusRadioButton" VerticalContentAlignment="Center" GroupName="RadiusGroup" IsChecked="{Binding Source={StaticResource DriveSettings}, Path=IsRadius, Mode=TwoWay}" Unchecked="RadiusRadioButton_Unchecked" Checked="RadiusRadioButton_Checked"/>
+                            <TextBox x:Name="RadiusTextBox" Style="{DynamicResource TextBoxStyle}" Text="{Binding Source={StaticResource DriveSettings}, Path=Radius, Mode=TwoWay}" />
+                            <Label Content="m" />
+                        </WrapPanel>
+                        <RadioButton x:Name="StraightRadioButton" Content="Straight" Margin="0,8,0,0" GroupName="RadiusGroup" IsChecked="{Binding Source={StaticResource DriveSettings}, Path=IsStraight, Mode=TwoWay}"/>
+                        <RadioButton x:Name="SpinRadioButton" Content="Spin" Margin="0,8,0,0" GroupName="RadiusGroup" IsChecked="{Binding Source={StaticResource DriveSettings}, Path=IsSpin, Mode=TwoWay}"/>
+                    </WrapPanel>
+                </GroupBox>
+                <Button x:Name="DriveButton" Content="Drive" HorizontalAlignment="Left" Margin="343,22,0,0" VerticalAlignment="Top" Width="60" Height="60"/>
+                <Button x:Name="StopButton" Content="Stop" HorizontalAlignment="Left" Margin="343,110,0,0" VerticalAlignment="Top" Width="60" Height="60"/>
+            </Grid>
+        </GroupBox>
+    </Grid>
+</Window>
