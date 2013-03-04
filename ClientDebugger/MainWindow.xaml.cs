@@ -1,28 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿//------------------------------------------------------------------------------
+// <copyright file="MainWindow.xaml.cs" company="Gage Ames">
+//     Copyright (c) Gage Ames.  All rights reserved.
+// </copyright>
+//------------------------------------------------------------------------------
 
 namespace ClientDebugger
 {
+    using System.Windows;
+
+    using AsimovClient.Create;
+
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
+        private ICreateController roomba;
+
         public MainWindow()
         {
-            InitializeComponent();
+            this.roomba = new AsimovController(new TcpCreateCommunicator("127.0.0.1", 4545));
+
+            this.InitializeComponent();
         }
 
         private void AngleRadioButton_OnChecked(object sender, RoutedEventArgs e)
@@ -87,6 +86,83 @@ namespace ClientDebugger
             {
                 this.RadiusTextBox.IsEnabled = false;
             }
+        }
+
+        private void DriveButton_Click(object sender, RoutedEventArgs e)
+        {
+            DriveProperties settings = this.Resources["DriveSettings"] as DriveProperties;
+
+            if (settings == null)
+            {
+                MessageBox.Show("Settings is null!");
+                return;
+            }
+
+            if (settings.IsIndefinate)
+            {
+                if (settings.IsStraight)
+                {
+                    this.roomba.Drive(settings.Velocity);
+                }
+                else if (settings.IsSpin)
+                {
+                    this.roomba.Spin(settings.Velocity);
+                }
+                else
+                {
+                    this.roomba.Drive(settings.Velocity, settings.Radius);                    
+                }
+            }
+            else if (settings.IsDistance)
+            {
+                if (settings.IsStraight)
+                {
+                    this.roomba.DriveDistance(settings.Velocity, settings.Distance);
+                }
+                else if (settings.IsSpin)
+                {
+                    MessageBox.Show("Cannot spin for a distance.");
+                }
+                else
+                {
+                    this.roomba.DriveDistance(settings.Velocity, settings.Radius, settings.Distance);
+                }
+            }
+            else if (settings.IsAngle)
+            {
+                if (settings.IsStraight)
+                {
+                    MessageBox.Show("Cannot drive straight for an angle.");
+                }
+                else if (settings.IsSpin)
+                {
+                    this.roomba.SpinAngle(settings.Velocity, settings.Angle);
+                }
+                else
+                {
+                    MessageBox.Show("Cannot drive for an angle.");
+                }
+            }
+            else if (settings.IsTime)
+            {
+                if (settings.IsStraight)
+                {
+                    this.roomba.DriveTime(settings.Velocity, settings.Time);
+                }
+                else if (settings.IsSpin)
+                {
+                    this.roomba.SpinTime(settings.Velocity, settings.Time);
+                }
+                else
+                {
+                    this.roomba.DriveTime(settings.Velocity, settings.Radius, settings.Time);
+                }
+            }
+        }
+
+        private void StopButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.roomba.Stop();
         }
     }
 }

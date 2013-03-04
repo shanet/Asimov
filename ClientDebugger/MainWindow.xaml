@@ -50,8 +50,8 @@
                         <RadioButton x:Name="SpinRadioButton" Content="Spin" Margin="0,8,0,0" GroupName="RadiusGroup" IsChecked="{Binding Source={StaticResource DriveSettings}, Path=IsSpin, Mode=TwoWay}"/>
                     </WrapPanel>
                 </GroupBox>
-                <Button x:Name="DriveButton" Content="Drive" HorizontalAlignment="Left" Margin="343,22,0,0" VerticalAlignment="Top" Width="60" Height="60"/>
-                <Button x:Name="StopButton" Content="Stop" HorizontalAlignment="Left" Margin="343,110,0,0" VerticalAlignment="Top" Width="60" Height="60"/>
+                <Button x:Name="DriveButton" Content="Drive" HorizontalAlignment="Left" Margin="343,22,0,0" VerticalAlignment="Top" Width="60" Height="60" Click="DriveButton_Click"/>
+                <Button x:Name="StopButton" Content="Stop" HorizontalAlignment="Left" Margin="343,110,0,0" VerticalAlignment="Top" Width="60" Height="60" Click="StopButton_Click"/>
             </Grid>
         </GroupBox>
     </Grid>
