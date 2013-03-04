@@ -48,7 +48,7 @@ void processCmdLineArgs(int argc, char **argv) {
     }
 
     // The last argument should be the device to use
-    if(argc == optind+1 && device != NULL) {
+    if(argc == optind+1 && device == NULL) {
         device = argv[optind];
     } else if(argc > optind) {
         fprintf(stderr, "%s: Too many arguments specified.\n", prog);
