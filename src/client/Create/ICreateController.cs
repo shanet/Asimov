@@ -159,7 +159,7 @@ namespace AsimovClient.Create
         /// <summary>
         /// Hold all commands until the Create has rotated the specified number of degrees.
         /// </summary>
-        /// <param name="angle">The angle to wait for in degrees.</param>
+        /// <param name="angle">The angle to wait for in degrees (positive is clockwise, negative is counterclockwise).</param>
         void WaitAngle(int angle);
 
         /// <summary>
