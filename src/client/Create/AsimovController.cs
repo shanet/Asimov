@@ -55,6 +55,9 @@ namespace AsimovClient.Create
 
             AsimovLog.WriteLine("Driving for {0} mm at {1} mm/s with radius {2} mm.", distance, (int)Units.BaseToMilli(velocity), (int)Units.BaseToMilli(radius));
 
+            // Ensure that the sign of the distance argument matches the sign of the velocity.  Otherwise, we'll drive forever.
+            distance = Math.Sign(velocity) * Math.Abs(distance);
+
             this.communicator.ExecuteCommand("DRIVE DISTANCE {0} {1} {2}", (int)Units.BaseToMilli(velocity), (int)Units.BaseToMilli(radius), (int)Units.BaseToMilli(distance));
         }
 
@@ -63,6 +66,9 @@ namespace AsimovClient.Create
             Verify.ArgumentInRange(velocity, CreateConstants.VelocityMin, CreateConstants.VelocityMax, "velocity");
 
             AsimovLog.WriteLine("Driving straight for {0} mm at {1} mm/s.", distance, (int)Units.BaseToMilli(velocity));
+
+            // Ensure that the sign of the distance argument matches the sign of the velocity.  Otherwise, we'll drive forever.
+            distance = Math.Sign(velocity) * Math.Abs(distance);
 
             this.communicator.ExecuteCommand("DRIVE STRAIGHT DISTANCE {0} {1}", (int)Units.BaseToMilli(velocity), (int)Units.BaseToMilli(distance));
         }
@@ -110,6 +116,9 @@ namespace AsimovClient.Create
             Verify.ArgumentInRange(velocity, CreateConstants.VelocityMin, CreateConstants.VelocityMax, "velocity");
 
             AsimovLog.WriteLine("Spinning for {0} degrees with a velocity of {1} mm/s {2}clockwise.", degrees, Math.Abs((int)Units.BaseToMilli(velocity)), velocity < 0 ? "counter" : string.Empty);
+
+            // Ensure that the sign of the degrees argument is opposite the the sign of the velocity.  Otherwise, we'll spin forever.
+            degrees = Math.Sign(velocity) * -Math.Abs(degrees);
 
             this.communicator.ExecuteCommand("DRIVE SPIN ANGLE {0} {1}", (int)Units.BaseToMilli(velocity), degrees);
         }
@@ -199,6 +208,9 @@ namespace AsimovClient.Create
         public void WaitAngle(int angle)
         {
             AsimovLog.WriteLine("Waiting until we rotate {0} degrees.", angle);
+
+            // The Create uses positive for counterclockwise, so we need to negate the argument.
+            angle = -angle;
 
             this.communicator.ExecuteCommand("WAIT ANGLE {0}", angle);
         }
