@@ -20,6 +20,7 @@ namespace AsimovClient.Create
         private const string ReadyResponse = "REDY";
         private const string AcknowledgementResponse = "ACK";
         private const string ErrorResponse = "ERR";
+        private const string EndCommand = "END";
 
         private TcpClient client;
         private IPAddress ip;
@@ -59,6 +60,8 @@ namespace AsimovClient.Create
 
         ~TcpCreateCommunicator()
         {
+            // Send the end command and close the connection
+            this.SendCommand(EndCommand);
             this.client.Close();
         }
 
