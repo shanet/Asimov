@@ -226,5 +226,23 @@ namespace AsimovClient.Create
 
             this.communicator.ExecuteCommand("WAIT EVENT {0}", (int)waitEvent);
         }
+
+        public void Dispose()
+        {
+            this.Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (this.communicator != null)
+                {
+                    this.communicator.Dispose();
+                    this.communicator = null;
+                }
+            }
+        }
     }
 }

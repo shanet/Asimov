@@ -6,7 +6,9 @@
 
 namespace AsimovClient.Create
 {
-    public interface ICreateCommunicator
+    using System;
+
+    public interface ICreateCommunicator : IDisposable
     {
         /// <summary>
         /// Executes the given command using the classes communication method.

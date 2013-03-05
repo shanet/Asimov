@@ -16,5 +16,10 @@ namespace AsimovClient.Create
 
             return true;
         }
+
+        public void Dispose()
+        {
+            // Not needed
+        }
     }
 }
