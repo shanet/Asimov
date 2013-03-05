@@ -58,13 +58,6 @@ namespace AsimovClient.Create
         {
         }
 
-        ~TcpCreateCommunicator()
-        {
-            // Send the end command and close the connection
-            this.SendCommand(EndCommand);
-            this.client.Close();
-        }
-
         public bool ExecuteCommand(string commandFormat, params object[] args)
         {
             string command = string.Format(commandFormat, args);
@@ -83,6 +76,26 @@ namespace AsimovClient.Create
             }
 
             return true;
+        }
+
+        public void Dispose()
+        {
+            this.Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (this.client != null)
+                {
+                    // Send the end command and close the connection
+                    this.SendCommand(EndCommand);
+                    this.client.Close();
+                    this.client = null;
+                }
+            }
         }
 
         private void Handshake()
