@@ -6,6 +6,7 @@
 
 namespace ClientDebugger
 {
+    using System;
     using System.Windows;
 
     using AsimovClient.Create;
@@ -15,11 +16,25 @@ namespace ClientDebugger
     /// </summary>
     public partial class MainWindow : Window
     {
+        private const double DefaultVelocity = 0.3;
+
+        private const string DefaultIPAddress = "127.0.0.1";
+
+        private const int DefaultPort = 4545;
+
         private ICreateController roomba;
 
         public MainWindow()
         {
-            this.roomba = new AsimovController(new TcpCreateCommunicator("127.0.0.1", 4545));
+            try
+            {
+                this.roomba = new AsimovController(new TcpCreateCommunicator(DefaultIPAddress, DefaultPort));
+            }
+            catch (Exception)
+            {
+                MessageBox.Show(string.Format("Could not connect to Asimov server at {0}:{1}.", DefaultIPAddress, DefaultPort));
+                this.roomba = null;
+            }
 
             this.InitializeComponent();
         }
@@ -92,9 +107,8 @@ namespace ClientDebugger
         {
             DriveProperties settings = this.Resources["DriveSettings"] as DriveProperties;
 
-            if (settings == null)
+            if (settings == null || this.roomba == null)
             {
-                MessageBox.Show("Settings is null!");
                 return;
             }
 
@@ -162,7 +176,42 @@ namespace ClientDebugger
 
         private void StopButton_Click(object sender, RoutedEventArgs e)
         {
-            this.roomba.Stop();
+            if (this.roomba != null)
+            {
+                this.roomba.Stop();
+            }
+        }
+
+        private void UpButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.roomba != null)
+            {
+                this.roomba.Drive(DefaultVelocity);
+            }
+        }
+
+        private void DownButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.roomba != null)
+            {
+                this.roomba.Drive(-DefaultVelocity);
+            }
+        }
+
+        private void LeftButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.roomba != null)
+            {
+                this.roomba.Spin(-DefaultVelocity);
+            }
+        }
+
+        private void RightButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.roomba != null)
+            {
+                this.roomba.Spin(DefaultVelocity);
+            }
         }
     }
 }

@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:src="clr-namespace:ClientDebugger"
-        Title="Asimov Client Debugger" Height="265" Width="460">
+        Title="Asimov Client Debugger" Height="275" Width="480">
     <Window.Resources>
         <src:DriveProperties x:Key="DriveSettings" IsIndefinate="True" IsRadius="True"/>
         <Style x:Key="TextBoxStyle" TargetType="{x:Type TextBox}">
@@ -11,9 +11,9 @@
         </Style>
     </Window.Resources>
     <Grid>
-        <GroupBox x:Name="DriveGroupBox" Header="Drive" HorizontalAlignment="Center" Margin="10,10,10,10" VerticalAlignment="Top">
-            <Grid Width="429">
-                <GroupBox x:Name="DriveModeGroupBox" Header="Mode" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="169" Width="210" >
+        <GroupBox x:Name="DriveGroupBox" Header="Drive" HorizontalAlignment="Center" Margin="10,10,10,10" VerticalAlignment="Top" Width="442" Height="214">
+            <Grid>
+                <GroupBox x:Name="DriveModeGroupBox" Header="Mode" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="177" Width="210" >
                     <WrapPanel Margin="5,5,5,5">
                         <RadioButton x:Name="IndefinateRadioButton" Content="Indefinate" GroupName="ModeGroup" IsChecked="{Binding Source={StaticResource DriveSettings}, Path=IsIndefinate, Mode=TwoWay}" />
                         <WrapPanel Margin="0,8,0,0">
@@ -39,7 +39,7 @@
                         <Label Content="m/s" />
                     </WrapPanel>
                 </GroupBox>
-                <GroupBox x:Name="DriveRadiusGroupBox" Header="Radius" HorizontalAlignment="Left" Margin="226,75,0,0" VerticalAlignment="Top" Height="104" Width="112">
+                <GroupBox x:Name="DriveRadiusGroupBox" Header="Radius" HorizontalAlignment="Left" Margin="226,78,0,0" VerticalAlignment="Top" Height="109" Width="112">
                     <WrapPanel Margin="5,5,5,5">
                         <WrapPanel>
                             <RadioButton x:Name="RadiusRadioButton" VerticalContentAlignment="Center" GroupName="RadiusGroup" IsChecked="{Binding Source={StaticResource DriveSettings}, Path=IsRadius, Mode=TwoWay}" Unchecked="RadiusRadioButton_Unchecked" Checked="RadiusRadioButton_Checked"/>
@@ -50,8 +50,16 @@
                         <RadioButton x:Name="SpinRadioButton" Content="Spin" Margin="0,8,0,0" GroupName="RadiusGroup" IsChecked="{Binding Source={StaticResource DriveSettings}, Path=IsSpin, Mode=TwoWay}"/>
                     </WrapPanel>
                 </GroupBox>
-                <Button x:Name="DriveButton" Content="Drive" HorizontalAlignment="Left" Margin="343,22,0,0" VerticalAlignment="Top" Width="60" Height="60" Click="DriveButton_Click"/>
-                <Button x:Name="StopButton" Content="Stop" HorizontalAlignment="Left" Margin="343,110,0,0" VerticalAlignment="Top" Width="60" Height="60" Click="StopButton_Click"/>
+                <Button x:Name="DriveButton" Content="Drive" HorizontalAlignment="Left" Margin="353,10,0,0" VerticalAlignment="Top" Width="60" Height="40" Click="DriveButton_Click"/>
+                <Button x:Name="StopButton" Content="Stop" HorizontalAlignment="Left" Margin="353,55,0,0" VerticalAlignment="Top" Width="60" Height="40" Click="StopButton_Click"/>
+                <GroupBox Header="Quick" HorizontalAlignment="Left" Margin="343,100,0,0" VerticalAlignment="Top" Height="87" Width="80">
+                    <Grid>
+                        <Button x:Name="UpButton" Content="U" HorizontalAlignment="Center" Margin="0,2,0,0" VerticalAlignment="Top" Width="20" Click="UpButton_Click"/>
+                        <Button x:Name="DownButton" Content="D" HorizontalAlignment="Center" Margin="0,0,0,2" VerticalAlignment="Bottom" Width="20" Click="DownButton_Click"/>
+                        <Button x:Name="LeftButton" Content="L" HorizontalAlignment="Left" Margin="2,0,0,0" VerticalAlignment="Center" Width="20" Click="LeftButton_Click"/>
+                        <Button x:Name="RightButton" Content="R" HorizontalAlignment="Right" Margin="0,0,2,0" VerticalAlignment="Center" Width="20" Click="RightButton_Click"/>
+                    </Grid>
+                </GroupBox>
             </Grid>
         </GroupBox>
     </Grid>
