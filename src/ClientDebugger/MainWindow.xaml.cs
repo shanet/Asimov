@@ -213,5 +213,14 @@ namespace ClientDebugger
                 this.roomba.Spin(DefaultVelocity);
             }
         }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            if (this.roomba != null)
+            {
+                this.roomba.Dispose();
+                this.roomba = null;
+            }
+        }
     }
 }
