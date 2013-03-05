@@ -1,8 +1,9 @@
 # Build Folders (you can keep bin if you'd like, to store dlls and pdbs)
-#[Bb]in/
-bin/asimov-server
-bin/asimov-client
+[Bb]in/
 [Oo]bj/
+
+# Object files
+*.o
 
 # mstest test results
 TestResults
