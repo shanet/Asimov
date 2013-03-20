@@ -9,6 +9,7 @@ namespace AsimovClient.Sensing
     using System;
     using Microsoft.Kinect;
     using Microsoft.Kinect.Toolkit;
+    using Gestures;
 
     public class PersonLocator
     {
@@ -18,9 +19,12 @@ namespace AsimovClient.Sensing
 
         private bool isPersonNotCenteredInvoked;
 
-        public PersonLocator(KinectSensorChooser sensorChooser)
+        private IGesture[] g;
+
+        public PersonLocator(KinectSensorChooser sensorChooser, IGesture[] g)
         {
             this.isPersonNotCenteredInvoked = false;
+            this.g = g;
 
             // If the sensor changes, we need to set up the new sensor
             sensorChooser.KinectChanged += this.KinectSensorChanged;
@@ -51,10 +55,23 @@ namespace AsimovClient.Sensing
             // If we have skeletons to process
             if (skeletons.Length != 0)
             {
-                // Process each skeleton
-                foreach (Skeleton skeleton in skeletons)
+                foreach (Skeleton s in skeletons)
                 {
-                    if (skeleton.TrackingState == SkeletonTrackingState.Tracked)
+                    if (s.TrackingState == SkeletonTrackingState.Tracked)
+                    {
+                        foreach (IGesture cur in g)
+                        {
+                            cur.UpdateGesture(s);
+                        }
+                    }
+                }
+
+                // Process each skeleton
+                /*foreach (Skeleton skeleton in skeletons)
+                {
+
+
+                    /*if (skeleton.TrackingState == SkeletonTrackingState.Tracked)
                     {
                         double angle = Math.Atan2(skeleton.Position.X, skeleton.Position.Z) * 180 / Math.PI;
 
@@ -73,8 +90,8 @@ namespace AsimovClient.Sensing
                     else if (skeleton.TrackingState == SkeletonTrackingState.PositionOnly)
                     {
                         //TODO
-                    }
-                }
+                    }/
+                }*/
             }
         }
 

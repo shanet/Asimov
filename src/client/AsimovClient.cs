@@ -12,6 +12,7 @@ namespace AsimovClient
     using Logging;
     using Microsoft.Kinect.Toolkit;
     using Sensing;
+    using Sensing.Gestures;
 
     public class AsimovClient
     {
@@ -30,12 +31,13 @@ namespace AsimovClient
                 roomba = new AsimovController(new ConsoleCreateCommunicator());                
                 endEvent = new ManualResetEvent(false);
                 sensorChooser = new KinectSensorChooser();
-                personLocator = new PersonLocator(sensorChooser);
+                personLocator = new PersonLocator(sensorChooser, InitGestures());
 
                 // Subscribe to events that we need to handle
                 personLocator.OnPersonNotCentered += OnPersonNotCentered;
                 personLocator.OnPersonCentered += OnPersonCentered;
 
+                
                 sensorChooser.Start();
 
                 endEvent.WaitOne();
@@ -47,6 +49,12 @@ namespace AsimovClient
             }
         }
 
+        public static void TestGestureReaction(object sender, object shouldBeNull)
+        {
+            // Todo
+            Console.WriteLine("Gesture Recognized");
+        }
+
         private static void OnPersonCentered(object sender)
         {
             roomba.Stop();
@@ -56,6 +64,23 @@ namespace AsimovClient
         {
             //TODO: Turn a certain direction rather than a specific angle
             roomba.SpinAngle(Math.Sign(angle) * CreateConstants.VelocityMax, (int)angle);
+        }
+
+        private static IGesture[] InitGestures()
+        {
+            const int NUM_GESTURES = 1;
+
+            IGesture[] retval = new IGesture[NUM_GESTURES];
+
+            // add gestures
+            UpUp upup = new UpUp("upup");
+
+            // subscribe to events
+            upup.UpUpRecognized += TestGestureReaction;
+
+            retval[0] = upup;
+
+            return retval;
         }
     }
 }
