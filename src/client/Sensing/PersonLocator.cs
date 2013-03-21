@@ -6,10 +6,11 @@
 
 namespace AsimovClient.Sensing
 {
-    using System;
+    using System.Collections.Generic;
+
+    using Gestures;
     using Microsoft.Kinect;
     using Microsoft.Kinect.Toolkit;
-    using Gestures;
 
     public class PersonLocator
     {
@@ -19,12 +20,12 @@ namespace AsimovClient.Sensing
 
         private bool isPersonNotCenteredInvoked;
 
-        private IGesture[] g;
+        private ICollection<IGesture> gestures;
 
-        public PersonLocator(KinectSensorChooser sensorChooser, IGesture[] g)
+        public PersonLocator(KinectSensorChooser sensorChooser, ICollection<IGesture> gestures)
         {
             this.isPersonNotCenteredInvoked = false;
-            this.g = g;
+            this.gestures = gestures;
 
             // If the sensor changes, we need to set up the new sensor
             sensorChooser.KinectChanged += this.KinectSensorChanged;
@@ -55,14 +56,18 @@ namespace AsimovClient.Sensing
             // If we have skeletons to process
             if (skeletons.Length != 0)
             {
-                foreach (Skeleton s in skeletons)
+                foreach (Skeleton skeleton in skeletons)
                 {
-                    if (s.TrackingState == SkeletonTrackingState.Tracked)
+                    if (skeleton.TrackingState == SkeletonTrackingState.Tracked)
                     {
-                        foreach (IGesture cur in g)
+                        foreach (IGesture gesture in this.gestures)
                         {
-                            cur.UpdateGesture(s);
+                            gesture.UpdateGesture(skeleton);
                         }
+                    }
+                    else if (skeleton.TrackingState == SkeletonTrackingState.PositionOnly)
+                    {
+                        //TODO
                     }
                 }
 
@@ -90,7 +95,7 @@ namespace AsimovClient.Sensing
                     else if (skeleton.TrackingState == SkeletonTrackingState.PositionOnly)
                     {
                         //TODO
-                    }/
+                    }
                 }*/
             }
         }

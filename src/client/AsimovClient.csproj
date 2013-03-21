@@ -52,12 +52,14 @@
     <Compile Include="Create\WaitEvent.cs" />
     <Compile Include="Create\ICreateController.cs" />
     <Compile Include="Create\Led.cs" />
+    <Compile Include="Helpers\MathHelper.cs" />
+    <Compile Include="Helpers\SkeletonHelper.cs" />
     <Compile Include="Helpers\Units.cs" />
     <Compile Include="Helpers\Verify.cs" />
     <Compile Include="Logging\AsimovLog.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sensing\Gestures\IGesture.cs" />
-    <Compile Include="Sensing\Gestures\UpUp.cs" />
+    <Compile Include="Sensing\Gestures\UpUpGesture.cs" />
     <Compile Include="Sensing\PersonLocator.cs" />
   </ItemGroup>
   <ItemGroup>

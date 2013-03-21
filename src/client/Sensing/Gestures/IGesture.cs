@@ -1,8 +1,13 @@
-﻿using Microsoft.Kinect;
-using System;
+﻿//------------------------------------------------------------------------------
+// <copyright file="IGesture.cs" company="Aaron Goodermuth">
+//     Copyright (c) Aaron Goodermuth.  All rights reserved.
+// </copyright>
+//------------------------------------------------------------------------------
 
 namespace AsimovClient.Sensing.Gestures
 {
+    using Microsoft.Kinect;
+
     public interface IGesture
     {
         /// <summary>

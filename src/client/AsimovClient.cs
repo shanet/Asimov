@@ -7,6 +7,8 @@
 namespace AsimovClient
 {
     using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Threading;
     using Create;
     using Logging;
@@ -37,7 +39,6 @@ namespace AsimovClient
                 personLocator.OnPersonNotCentered += OnPersonNotCentered;
                 personLocator.OnPersonCentered += OnPersonCentered;
 
-                
                 sensorChooser.Start();
 
                 endEvent.WaitOne();
@@ -66,19 +67,18 @@ namespace AsimovClient
             roomba.SpinAngle(Math.Sign(angle) * CreateConstants.VelocityMax, (int)angle);
         }
 
-        private static IGesture[] InitGestures()
+        private static ICollection<IGesture> InitGestures()
         {
-            const int NUM_GESTURES = 1;
+            ICollection<IGesture> retval = new Collection<IGesture>();
 
-            IGesture[] retval = new IGesture[NUM_GESTURES];
+            // Create gestures
+            UpUpGesture upup = new UpUpGesture();
 
-            // add gestures
-            UpUp upup = new UpUp("upup");
-
-            // subscribe to events
+            // Subscribe to gesture-related events
             upup.UpUpRecognized += TestGestureReaction;
 
-            retval[0] = upup;
+            // Add gestures to the collection
+            retval.Add(upup);
 
             return retval;
         }
