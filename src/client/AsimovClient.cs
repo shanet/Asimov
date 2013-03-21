@@ -50,10 +50,26 @@ namespace AsimovClient
             }
         }
 
-        public static void TestGestureReaction(object sender, object shouldBeNull)
+        private static ICollection<IGesture> InitGestures()
         {
-            // Todo
-            Console.WriteLine("Gesture Recognized");
+            ICollection<IGesture> retval = new Collection<IGesture>();
+
+            // Create gestures
+            BothArmsUpGesture armsUp = new BothArmsUpGesture();
+            BothArmsDownGesture armsDown = new BothArmsDownGesture();
+            BothArmsOutGesture armsOut = new BothArmsOutGesture();
+
+            // Subscribe to gesture-related events
+            armsUp.BothArmsUpRecognized += OnBothArmsUp;
+            armsDown.BothArmsDownRecognized += OnBothArmsDown;
+            armsOut.BothArmsOutRecognized += OnBothArmsOut;
+
+            // Add gestures to the collection
+            retval.Add(armsUp);
+            retval.Add(armsDown);
+            retval.Add(armsOut);
+
+            return retval;
         }
 
         private static void OnPersonCentered(object sender)
@@ -67,20 +83,22 @@ namespace AsimovClient
             roomba.SpinAngle(Math.Sign(angle) * CreateConstants.VelocityMax, (int)angle);
         }
 
-        private static ICollection<IGesture> InitGestures()
+        public static void OnBothArmsUp(object sender, EventArgs e)
         {
-            ICollection<IGesture> retval = new Collection<IGesture>();
+            //TODO
+            Console.WriteLine("BothArmsUp Gesture Recognized");
+        }
 
-            // Create gestures
-            UpUpGesture upup = new UpUpGesture();
+        private static void OnBothArmsDown(object sender, EventArgs e)
+        {
+            //TODO
+            Console.WriteLine("BothArmsDown Gesture Recognized");
+        }
 
-            // Subscribe to gesture-related events
-            upup.UpUpRecognized += TestGestureReaction;
-
-            // Add gestures to the collection
-            retval.Add(upup);
-
-            return retval;
+        private static void OnBothArmsOut(object sender, EventArgs e)
+        {
+            //TODO
+            Console.WriteLine("BothArmsOut Gesture Recognized");
         }
     }
 }

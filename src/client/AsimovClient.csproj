@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AsimovClient.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="Create\AsimovController.cs" />
     <Compile Include="Create\ConsoleCreateCommunicator.cs" />
     <Compile Include="Create\CreateConstants.cs" />
@@ -58,8 +59,10 @@
     <Compile Include="Helpers\Verify.cs" />
     <Compile Include="Logging\AsimovLog.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sensing\Gestures\BothArmsDownGesture.cs" />
+    <Compile Include="Sensing\Gestures\BothArmsOutGesture.cs" />
     <Compile Include="Sensing\Gestures\IGesture.cs" />
-    <Compile Include="Sensing\Gestures\UpUpGesture.cs" />
+    <Compile Include="Sensing\Gestures\BothArmsUpGesture.cs" />
     <Compile Include="Sensing\PersonLocator.cs" />
   </ItemGroup>
   <ItemGroup>
