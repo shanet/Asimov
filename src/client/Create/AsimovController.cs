@@ -178,6 +178,9 @@ namespace AsimovClient.Create
             AsimovLog.WriteLine("Beeping.");
 
             this.communicator.ExecuteCommand("BEEP");
+
+            // Let the beep be heard before doing anything else
+            System.Threading.Thread.Sleep(40);
         }
 
         public void DefineSong(int songNumber, int[] notes, int[] durations)
