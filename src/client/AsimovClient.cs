@@ -15,6 +15,7 @@ namespace AsimovClient
     using Microsoft.Kinect.Toolkit;
     using Sensing;
     using Sensing.Gestures;
+    using Modes;
 
     public class AsimovClient
     {
@@ -26,6 +27,8 @@ namespace AsimovClient
 
         private static PersonLocator personLocator;
 
+        private static ModeController modeController;
+
         public static void Main(string[] args)
         {
             try
@@ -34,6 +37,7 @@ namespace AsimovClient
                 endEvent = new ManualResetEvent(false);
                 sensorChooser = new KinectSensorChooser();
                 personLocator = new PersonLocator(sensorChooser, InitGestures());
+                modeController = new ModeController();
 
                 // Subscribe to events that we need to handle
                 personLocator.OnPersonNotCentered += OnPersonNotCentered;
@@ -99,6 +103,13 @@ namespace AsimovClient
         {
             //TODO
             Console.WriteLine("BothArmsOut Gesture Recognized");
+        }
+
+        private static void ConfirmModeChange()
+        {
+            roomba.FlashLed(Led.Advance, 2, 500);
+            roomba.Beep();
+            roomba.Beep();
         }
     }
 }

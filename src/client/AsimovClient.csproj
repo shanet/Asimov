@@ -58,6 +58,8 @@
     <Compile Include="Helpers\Units.cs" />
     <Compile Include="Helpers\Verify.cs" />
     <Compile Include="Logging\AsimovLog.cs" />
+    <Compile Include="Modes\AsimovMode.cs" />
+    <Compile Include="Modes\ModeController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sensing\Gestures\BothArmsDownGesture.cs" />
     <Compile Include="Sensing\Gestures\BothArmsOutGesture.cs" />
