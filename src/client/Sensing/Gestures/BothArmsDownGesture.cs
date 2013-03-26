@@ -1,5 +1,5 @@
 ﻿//------------------------------------------------------------------------------
-// <copyright file="BothArmsUpGesture.cs" company="Aaron Goodermuth">
+// <copyright file="BothArmsDownGesture.cs" company="Aaron Goodermuth">
 //     Copyright (c) Aaron Goodermuth.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
