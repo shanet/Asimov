@@ -65,7 +65,6 @@
     <Compile Include="Sensing\Gestures\BothArmsOutGesture.cs" />
     <Compile Include="Sensing\Gestures\IGesture.cs" />
     <Compile Include="Sensing\Gestures\BothArmsUpGesture.cs" />
-    <Compile Include="Sensing\PersonLocator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

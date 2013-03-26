@@ -12,8 +12,9 @@ namespace AsimovClient
     using System.Threading;
     using Create;
     using Logging;
+
+    using Microsoft.Kinect;
     using Microsoft.Kinect.Toolkit;
-    using Sensing;
     using Sensing.Gestures;
     using Modes;
 
@@ -23,29 +24,30 @@ namespace AsimovClient
 
         private static ICreateController roomba;
 
-        private static KinectSensorChooser sensorChooser;
-
-        private static PersonLocator personLocator;
+        private static KinectSensor kinect;
 
         private static ModeController modeController;
+
+        private static ICollection<IGesture> gestures;  
 
         public static void Main(string[] args)
         {
             try
             {
-                roomba = new AsimovController(new ConsoleCreateCommunicator());                
+                KinectSensorChooser sensorChooser = new KinectSensorChooser();
+
                 endEvent = new ManualResetEvent(false);
-                sensorChooser = new KinectSensorChooser();
-                personLocator = new PersonLocator(sensorChooser, InitGestures());
+                roomba = new AsimovController(new ConsoleCreateCommunicator());
                 modeController = new ModeController();
+                gestures = InitGestures();
 
-                // Subscribe to events that we need to handle
-                personLocator.OnPersonNotCentered += OnPersonNotCentered;
-                personLocator.OnPersonCentered += OnPersonCentered;
-
+                // Find the Kinect and subscribe to changes in the sensor
+                sensorChooser.KinectChanged += KinectSensorChanged;
                 sensorChooser.Start();
 
+                // Do not exit until endEvent is fired
                 endEvent.WaitOne();
+                roomba.Dispose();
             }
             catch (Exception e)
             {
@@ -76,15 +78,67 @@ namespace AsimovClient
             return retval;
         }
 
-        private static void OnPersonCentered(object sender)
+        private static void SensorSkeletonFrameReady(object sender, SkeletonFrameReadyEventArgs e)
         {
-            roomba.Stop();
+            Skeleton[] skeletons = new Skeleton[0];
+
+            // Save all of the skeletons
+            using (SkeletonFrame skeletonFrame = e.OpenSkeletonFrame())
+            {
+                if (skeletonFrame != null)
+                {
+                    skeletons = new Skeleton[skeletonFrame.SkeletonArrayLength];
+                    skeletonFrame.CopySkeletonDataTo(skeletons);
+                }
+            }
+
+            // If we have skeletons to process
+            if (skeletons.Length != 0)
+            {
+                // Process each skeleton
+                foreach (Skeleton skeleton in skeletons)
+                {
+                    if (skeleton.TrackingState == SkeletonTrackingState.Tracked)
+                    {
+                        // Send the new skeleton to the mode controller
+                        modeController.UpdateSkeleton(skeleton);
+
+                        // Send the new skeleton to gesture handlers
+                        foreach (IGesture gesture in gestures)
+                        {
+                            gesture.UpdateGesture(skeleton);
+                        }
+                    }
+                    else if (skeleton.TrackingState == SkeletonTrackingState.PositionOnly)
+                    {
+                        //TODO
+                    }
+                }
+            }
         }
 
-        private static void OnPersonNotCentered(object sender, double angle)
+        private static void KinectSensorChanged(object sender, KinectChangedEventArgs args)
         {
-            //TODO: Turn a certain direction rather than a specific angle
-            roomba.SpinAngle(Math.Sign(angle) * CreateConstants.VelocityMax, (int)angle);
+            if (args.NewSensor != null)
+            {
+                kinect = args.NewSensor;
+
+                // Add an event handler to be called whenever there is new color frame data
+                kinect.SkeletonFrameReady += SensorSkeletonFrameReady;
+                
+                // Turn on the skeleton stream to receive skeleton frames
+                kinect.SkeletonStream.Enable();
+
+                // Tilt the Kinect to allow for the best view of the skeletons
+                kinect.ElevationAngle = 0;
+            }
+
+            if (args.OldSensor != null)
+            {
+                // Turn off the skelton sensor and unsubscribe from its events
+                args.OldSensor.SkeletonFrameReady -= SensorSkeletonFrameReady;
+                args.OldSensor.SkeletonStream.Disable();
+            }
         }
 
         public static void OnBothArmsUp(object sender, EventArgs e)
