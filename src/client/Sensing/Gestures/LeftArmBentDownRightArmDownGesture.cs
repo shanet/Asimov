@@ -1,5 +1,5 @@
 ﻿//------------------------------------------------------------------------------
-// <copyright file="BothArmsOutGesture.cs" company="Aaron Goodermuth">
+// <copyright file="LeftArmBentDownRightArmDownGesture.cs" company="Aaron Goodermuth">
 //     Copyright (c) Aaron Goodermuth.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
@@ -12,10 +12,11 @@ namespace AsimovClient.Sensing.Gestures
 
     using Microsoft.Kinect;
 
-    public class BothArmsOutGesture : IGesture
+    public class LeftArmBentDownRightArmDownGesture : IGesture
     {
         private const float DesiredLeftJointAngle = -180;
-        private const float DesiredRightJointAngle = 0;
+        private const float DesiredLeftElbowJointAngle = -90;
+        private const float DesiredRightShoulderJointAngle = -90;
         private const float JointToleranceAngle = 30;
 
         private const float DesiredLeftPlaneAngle = -180;
@@ -24,12 +25,12 @@ namespace AsimovClient.Sensing.Gestures
 
         private DateTime lastEventFireTime;
 
-        public BothArmsOutGesture()
+        public LeftArmBentDownRightArmDownGesture()
         {
             this.lastEventFireTime = DateTime.MinValue;
         }
 
-        public event EventHandler BothArmsOutRecognized;
+        public event EventHandler LeftArmBentDownRightArmDownRecognized;
 
         public void UpdateGesture(Skeleton skeleton)
         {
@@ -38,7 +39,7 @@ namespace AsimovClient.Sensing.Gestures
                 if (this.CheckGesture(skeleton) && DateTime.Now.Subtract(this.lastEventFireTime) >= Constants.GestureWaitTime)
                 {
                     this.lastEventFireTime = DateTime.Now;
-                    this.BothArmsOutRecognized(this, null);
+                    this.LeftArmBentDownRightArmDownRecognized(this, null);
                 }
             }
         }
@@ -56,10 +57,10 @@ namespace AsimovClient.Sensing.Gestures
                 angles[2] = SkeletonHelper.CalculateAngleXY(skeleton.Joints[JointType.ElbowRight], skeleton.Joints[JointType.WristRight]);
                 angles[3] = SkeletonHelper.CalculateAngleXY(skeleton.Joints[JointType.ShoulderRight], skeleton.Joints[JointType.ElbowRight]);
 
-                isValid = MathHelper.AreEqualWithinTolerance(angles[0], DesiredLeftJointAngle, JointToleranceAngle)
+                isValid = MathHelper.AreEqualWithinTolerance(angles[0], DesiredLeftElbowJointAngle, JointToleranceAngle)
                           && MathHelper.AreEqualWithinTolerance(angles[1], DesiredLeftJointAngle, JointToleranceAngle)
-                          && MathHelper.AreEqualWithinTolerance(angles[2], DesiredRightJointAngle, JointToleranceAngle)
-                          && MathHelper.AreEqualWithinTolerance(angles[3], DesiredRightJointAngle, JointToleranceAngle);
+                          && MathHelper.AreEqualWithinTolerance(angles[2], DesiredRightShoulderJointAngle, JointToleranceAngle)
+                          && MathHelper.AreEqualWithinTolerance(angles[3], DesiredRightShoulderJointAngle, JointToleranceAngle);
 
                 // Check if the skeleton's arms are in the YZ plane
                 /*angles[0] = SkeletonHelper.CalculateAngleXZ(skeleton.Joints[JointType.ElbowLeft], skeleton.Joints[JointType.WristLeft]);

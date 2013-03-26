@@ -62,16 +62,40 @@ namespace AsimovClient
             ICollection<IGesture> retval = new Collection<IGesture>();
 
             // Create gestures
-            BothArmsUpGesture armsUp = new BothArmsUpGesture();
             BothArmsOutGesture armsOut = new BothArmsOutGesture();
+            BothArmsUpGesture armsUp = new BothArmsUpGesture();
+            BothElbowsBentUpGesture elbowsBent = new BothElbowsBentUpGesture();
+            LeftArmBentDownRightArmDownGesture leftBentDown = new LeftArmBentDownRightArmDownGesture();
+            LeftArmDownRightArmBentDownGesture rightBentDown = new LeftArmDownRightArmBentDownGesture();
+            LeftArmDownRightArmBentUpGesture rightBentUp = new LeftArmDownRightArmBentUpGesture();
+            LeftArmDownRightArmOutGesture rightOut = new LeftArmDownRightArmOutGesture();
+            LeftArmOutRightArmDownGesture leftOut = new LeftArmOutRightArmDownGesture();
+            LeftArmOutRightArmUpGesture leftOutRightUp = new LeftArmOutRightArmUpGesture();
+            LeftArmUpRightArmOutGesture leftUpRightOut = new LeftArmUpRightArmOutGesture();
 
             // Subscribe to gesture-related events
             armsUp.BothArmsUpRecognized += OnBothArmsUp;
             armsOut.BothArmsOutRecognized += OnBothArmsOut;
+            elbowsBent.BothElbowsBentUpRecognized += OnBothElbowsBentUp;
+            leftBentDown.LeftArmBentDownRightArmDownRecognized += OnLeftArmBentDownRightArmDown;
+            rightBentDown.LeftArmDownRightArmBentDownRecognized += OnLeftArmDownRightArmBentDown;
+            rightBentUp.LeftArmDownRightArmBentUpRecognized += OnLeftArmDownRightArmBentUp;
+            rightOut.LeftArmDownRightArmOutRecognized += OnLeftArmDownRightArmOut;
+            leftOut.LeftArmOutRightArmDownRecognized += OnLeftArmOutRightArmDown;
+            leftOutRightUp.LeftArmOutRightArmUpRecognized += OnLeftArmOutRightArmUp;
+            leftUpRightOut.LeftArmUpRightArmOutRecognized += OnLeftArmUpRightArmOut;
 
             // Add gestures to the collection
             retval.Add(armsUp);
             retval.Add(armsOut);
+            retval.Add(elbowsBent);
+            retval.Add(leftBentDown);
+            retval.Add(rightBentDown);
+            retval.Add(rightBentUp);
+            retval.Add(rightOut);
+            retval.Add(leftOut);
+            retval.Add(leftOutRightUp);
+            retval.Add(leftUpRightOut);
 
             return retval;
         }
@@ -139,7 +163,18 @@ namespace AsimovClient
             }
         }
 
-        public static void OnBothArmsUp(object sender, EventArgs e)
+        private static void OnBothArmsOut(object sender, EventArgs e)
+        {
+            // Drinking Mode
+            Console.WriteLine("BothArmsOut Gesture Recognized");
+            AsimovLog.WriteLine("BothArmsOut Gesture Recognized");
+
+            // Set the mode to drinking mode
+            modeController.CurrentMode = AsimovMode.Drinking;
+            AsimovLog.WriteLine("Mode set to drinking mode.");
+        }
+
+        private static void OnBothArmsUp(object sender, EventArgs e)
         {
             // Exit Mode
             Console.WriteLine("BothArmsUp Gesture Recognized");
@@ -150,15 +185,92 @@ namespace AsimovClient
             AsimovLog.WriteLine("Mode set to none.");
         }
 
-        private static void OnBothArmsOut(object sender, EventArgs e)
+        private static void OnBothElbowsBentUp(object sender, EventArgs e)
         {
-            // Drinking Mode
-            Console.WriteLine("BothArmsOut Gesture Recognized");
-            AsimovLog.WriteLine("BothArmsOut Gesture Recognized");
+            // Exit Mode
+            Console.WriteLine("BothElbowsBentUp Gesture Recognized");
+            AsimovLog.WriteLine("BothElbowsBentUp Gesture Recognized");
 
-            // Set the mode to drinking mode
-            modeController.CurrentMode = AsimovMode.Drinking;
-            AsimovLog.WriteLine("Mode set to drinking mode.");
+            // Set the mode to none in order to exit the current mode
+            modeController.CurrentMode = AsimovMode.None;
+            AsimovLog.WriteLine("Mode set to follow.");
+        }
+
+        private static void OnLeftArmBentDownRightArmDown(object sender, EventArgs e)
+        {
+            // Exit Mode
+            Console.WriteLine("LeftArmBentDownRightArmDown Gesture Recognized");
+            AsimovLog.WriteLine("LeftArmBentDownRightArmDown Gesture Recognized");
+
+            // Set the mode to none in order to exit the current mode
+            modeController.CurrentMode = AsimovMode.None;
+            AsimovLog.WriteLine("Mode set to turn around.");
+        }
+
+        private static void OnLeftArmDownRightArmBentDown(object sender, EventArgs e)
+        {
+            // Exit Mode
+            Console.WriteLine("LeftArmDownRightArmBentDown Gesture Recognized");
+            AsimovLog.WriteLine("LeftArmDownRightArmBentDown Gesture Recognized");
+
+            // Set the mode to none in order to exit the current mode
+            modeController.CurrentMode = AsimovMode.None;
+            AsimovLog.WriteLine("Mode set to move away.");
+        }
+
+        private static void OnLeftArmDownRightArmBentUp(object sender, EventArgs e)
+        {
+            // Exit Mode
+            Console.WriteLine("LeftArmDownRightArmBentUp Gesture Recognized");
+            AsimovLog.WriteLine("LeftArmDownRightArmBentUp Gesture Recognized");
+
+            // Set the mode to none in order to exit the current mode
+            modeController.CurrentMode = AsimovMode.None;
+            AsimovLog.WriteLine("Mode set to move forward.");
+        }
+
+        private static void OnLeftArmDownRightArmOut(object sender, EventArgs e)
+        {
+            // Exit Mode
+            Console.WriteLine("LeftArmDownRightArmOut Gesture Recognized");
+            AsimovLog.WriteLine("LeftArmDownRightArmOut Gesture Recognized");
+
+            // Set the mode to none in order to exit the current mode
+            modeController.CurrentMode = AsimovMode.None;
+            AsimovLog.WriteLine("Mode set to turn right.");
+        }
+
+        private static void OnLeftArmOutRightArmDown(object sender, EventArgs e)
+        {
+            // Exit Mode
+            Console.WriteLine("LeftArmOutRightArmDown Gesture Recognized");
+            AsimovLog.WriteLine("LeftArmOutRightArmDown Gesture Recognized");
+
+            // Set the mode to none in order to exit the current mode
+            modeController.CurrentMode = AsimovMode.None;
+            AsimovLog.WriteLine("Mode set to turn left.");
+        }
+
+        private static void OnLeftArmOutRightArmUp(object sender, EventArgs e)
+        {
+            // Exit Mode
+            Console.WriteLine("LeftArmOutRightArmUp Gesture Recognized");
+            AsimovLog.WriteLine("LeftArmOutRightArmUp Gesture Recognized");
+
+            // Set the mode to none in order to exit the current mode
+            modeController.CurrentMode = AsimovMode.None;
+            AsimovLog.WriteLine("Mode set to center.");
+        }
+
+        private static void OnLeftArmUpRightArmOut(object sender, EventArgs e)
+        {
+            // Exit Mode
+            Console.WriteLine("LeftArmUpRightArmOut Gesture Recognized");
+            AsimovLog.WriteLine("LeftArmUpRightArmOut Gesture Recognized");
+
+            // Set the mode to none in order to exit the current mode
+            modeController.CurrentMode = AsimovMode.None;
+            AsimovLog.WriteLine("Mode set to none.");
         }
 
         private static void ConfirmModeChange()

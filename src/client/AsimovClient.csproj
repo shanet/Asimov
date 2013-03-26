@@ -63,8 +63,16 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sensing\Gestures\BothArmsDownGesture.cs" />
     <Compile Include="Sensing\Gestures\BothArmsOutGesture.cs" />
+    <Compile Include="Sensing\Gestures\BothElbowsBentUpGesture.cs" />
     <Compile Include="Sensing\Gestures\IGesture.cs" />
     <Compile Include="Sensing\Gestures\BothArmsUpGesture.cs" />
+    <Compile Include="Sensing\Gestures\LeftArmBentDownRightArmDownGesture.cs" />
+    <Compile Include="Sensing\Gestures\LeftArmDownRightArmBentDownGesture.cs" />
+    <Compile Include="Sensing\Gestures\LeftArmDownRightArmBentUpGesture.cs" />
+    <Compile Include="Sensing\Gestures\LeftArmDownRightArmOutGesture.cs" />
+    <Compile Include="Sensing\Gestures\LeftArmOutRightArmDownGesture.cs" />
+    <Compile Include="Sensing\Gestures\LeftArmOutRightArmUpGesture.cs" />
+    <Compile Include="Sensing\Gestures\LeftArmUpRightArmOutGesture.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

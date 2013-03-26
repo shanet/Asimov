@@ -1,5 +1,5 @@
 ﻿//------------------------------------------------------------------------------
-// <copyright file="BothArmsOutGesture.cs" company="Aaron Goodermuth">
+// <copyright file="LeftArmDownRightArmOutGesture.cs" company="Aaron Goodermuth">
 //     Copyright (c) Aaron Goodermuth.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
@@ -12,9 +12,9 @@ namespace AsimovClient.Sensing.Gestures
 
     using Microsoft.Kinect;
 
-    public class BothArmsOutGesture : IGesture
+    public class LeftArmDownRightArmOutGesture : IGesture
     {
-        private const float DesiredLeftJointAngle = -180;
+        private const float DesiredLeftJointAngle = -90;
         private const float DesiredRightJointAngle = 0;
         private const float JointToleranceAngle = 30;
 
@@ -24,12 +24,12 @@ namespace AsimovClient.Sensing.Gestures
 
         private DateTime lastEventFireTime;
 
-        public BothArmsOutGesture()
+        public LeftArmDownRightArmOutGesture()
         {
             this.lastEventFireTime = DateTime.MinValue;
         }
 
-        public event EventHandler BothArmsOutRecognized;
+        public event EventHandler LeftArmDownRightArmOutRecognized;
 
         public void UpdateGesture(Skeleton skeleton)
         {
@@ -38,7 +38,7 @@ namespace AsimovClient.Sensing.Gestures
                 if (this.CheckGesture(skeleton) && DateTime.Now.Subtract(this.lastEventFireTime) >= Constants.GestureWaitTime)
                 {
                     this.lastEventFireTime = DateTime.Now;
-                    this.BothArmsOutRecognized(this, null);
+                    this.LeftArmDownRightArmOutRecognized(this, null);
                 }
             }
         }
