@@ -1,12 +1,11 @@
-﻿
+﻿//------------------------------------------------------------------------------
+// <copyright file="ModeController.cs" company="Gage Ames">
+//     Copyright (c) Gage Ames.  All rights reserved.
+// </copyright>
+//------------------------------------------------------------------------------
+
 namespace AsimovClient.Modes
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-
     using Microsoft.Kinect;
 
     public class ModeController
@@ -23,14 +22,30 @@ namespace AsimovClient.Modes
             switch (this.CurrentMode)
             {
                 case AsimovMode.Follow:
+                    this.FollowSkeleton(skeleton);
                     break;
                 case AsimovMode.Avoid:
-                    break;
-                case AsimovMode.Obstacle:
+                    this.AvoidSkeleton(skeleton);
                     break;
                 case AsimovMode.Drinking:
+                    this.DrinkingMode(skeleton);
                     break;
             }
+        }
+
+        private void FollowSkeleton(Skeleton skeleton)
+        {
+            //TODO
+        }
+
+        private void AvoidSkeleton(Skeleton skeleton)
+        {
+            //TODO
+        }
+
+        private void DrinkingMode(Skeleton skeleton)
+        {
+            //TODO
         }
     }
 }

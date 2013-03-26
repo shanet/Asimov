@@ -62,17 +62,14 @@ namespace AsimovClient
 
             // Create gestures
             BothArmsUpGesture armsUp = new BothArmsUpGesture();
-            BothArmsDownGesture armsDown = new BothArmsDownGesture();
             BothArmsOutGesture armsOut = new BothArmsOutGesture();
 
             // Subscribe to gesture-related events
             armsUp.BothArmsUpRecognized += OnBothArmsUp;
-            armsDown.BothArmsDownRecognized += OnBothArmsDown;
             armsOut.BothArmsOutRecognized += OnBothArmsOut;
 
             // Add gestures to the collection
             retval.Add(armsUp);
-            retval.Add(armsDown);
             retval.Add(armsOut);
 
             return retval;
@@ -143,20 +140,24 @@ namespace AsimovClient
 
         public static void OnBothArmsUp(object sender, EventArgs e)
         {
-            //TODO
+            // Exit Mode
             Console.WriteLine("BothArmsUp Gesture Recognized");
-        }
+            AsimovLog.WriteLine("BothArmsUp Gesture Recognized");
 
-        private static void OnBothArmsDown(object sender, EventArgs e)
-        {
-            //TODO
-            Console.WriteLine("BothArmsDown Gesture Recognized");
+            // Set the mode to none in order to exit the current mode
+            modeController.CurrentMode = AsimovMode.None;
+            AsimovLog.WriteLine("Mode set to none.");
         }
 
         private static void OnBothArmsOut(object sender, EventArgs e)
         {
-            //TODO
+            // Drinking Mode
             Console.WriteLine("BothArmsOut Gesture Recognized");
+            AsimovLog.WriteLine("BothArmsOut Gesture Recognized");
+
+            // Set the mode to drinking mode
+            modeController.CurrentMode = AsimovMode.Drinking;
+            AsimovLog.WriteLine("Mode set to drinking mode.");
         }
 
         private static void ConfirmModeChange()
