@@ -6,13 +6,20 @@
 
 namespace AsimovClient.Modes
 {
+    using System;
+
+    using Create;
+
     using Microsoft.Kinect;
 
     public class ModeController
     {
-        public ModeController()
+        private ICreateController roomba;
+
+        public ModeController(ICreateController roomba)
         {
             this.CurrentMode = AsimovMode.None;
+            this.roomba = roomba;
         }
 
         public AsimovMode CurrentMode { get; set; }
@@ -30,6 +37,9 @@ namespace AsimovClient.Modes
                 case AsimovMode.Drinking:
                     this.DrinkingMode(skeleton);
                     break;
+                case AsimovMode.Center:
+                    this.CenterSkeleton(skeleton);
+                    break;
             }
         }
 
@@ -46,6 +56,17 @@ namespace AsimovClient.Modes
         private void DrinkingMode(Skeleton skeleton)
         {
             //TODO
+        }
+
+        private void CenterSkeleton(Skeleton skeleton)
+        {
+            double angle = Math.Atan2(skeleton.Position.X, skeleton.Position.Z) * 180 / Math.PI;
+
+            // Determine if we need to center the skeleton we see
+            if (angle < -Constants.CenteredTolerance || angle > Constants.CenteredTolerance)
+            {
+                this.roomba.SpinAngle(Math.Sign(angle) * CreateConstants.VelocityMax, (int)angle); 
+            }
         }
     }
 }

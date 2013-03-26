@@ -15,8 +15,9 @@ namespace AsimovClient
 
     using Microsoft.Kinect;
     using Microsoft.Kinect.Toolkit;
-    using Sensing.Gestures;
+
     using Modes;
+    using Sensing.Gestures;
 
     public class AsimovClient
     {

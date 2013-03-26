@@ -12,6 +12,7 @@ namespace AsimovClient.Modes
         Follow,
         Avoid,
         Obstacle,
-        Drinking
+        Drinking,
+        Center
     }
 }
