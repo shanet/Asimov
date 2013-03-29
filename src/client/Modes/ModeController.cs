@@ -45,7 +45,16 @@ namespace AsimovClient.Modes
 
         private void FollowSkeleton(Skeleton skeleton)
         {
-            //TODO
+            double distanceFromSkeleton = skeleton.Position.Z;
+
+            // Center the skeleton
+            this.CenterSkeleton(skeleton);
+
+            if (Constants.DesiredDistanceFromSkelton < distanceFromSkeleton)
+            {
+                // Drive toward the skeleton as much as possible
+                this.roomba.DriveDistance(Constants.DefaultVelocity, Math.Min(distanceFromSkeleton - Constants.DesiredDistanceFromSkelton, CreateConstants.DistanceMax));
+            }
         }
 
         private void AvoidSkeleton(Skeleton skeleton)

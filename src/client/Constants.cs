@@ -18,6 +18,11 @@ namespace AsimovClient
         public const double CenteredTolerance = 3.0;
 
         /// <summary>
+        /// The desired number of meters to be from from the skeleton in follow mode.
+        /// </summary>
+        public const double DesiredDistanceFromSkelton = 1.5;
+
+        /// <summary>
         /// Default number of degrees to spin for gesture and voice commands.
         /// </summary>
         public const int DefaultSpinStep = 30;

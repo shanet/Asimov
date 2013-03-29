@@ -42,7 +42,6 @@ namespace AsimovClient.Sensing.Gestures
                     this.lastEventFireTime = DateTime.Now;
                     this.BothElbowsBentUpRecognized(this, null);
                 }
-
             }
         }
 
