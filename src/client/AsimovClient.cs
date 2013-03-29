@@ -39,7 +39,7 @@ namespace AsimovClient
 
                 endEvent = new ManualResetEvent(false);
                 roomba = new AsimovController(new ConsoleCreateCommunicator());
-                modeController = new ModeController();
+                modeController = new ModeController(roomba);
                 gestures = InitGestures();
 
                 // Find the Kinect and subscribe to changes in the sensor
@@ -166,111 +166,135 @@ namespace AsimovClient
         private static void OnBothArmsOut(object sender, EventArgs e)
         {
             // Drinking Mode
-            Console.WriteLine("BothArmsOut Gesture Recognized");
-            AsimovLog.WriteLine("BothArmsOut Gesture Recognized");
+            Console.WriteLine("Drinking Mode (BothArmsOut) Gesture Recognized");
+            AsimovLog.WriteLine("Drinking Mode (BothArmsOut) Gesture Recognized");
 
-            // Set the mode to drinking mode
-            modeController.CurrentMode = AsimovMode.Drinking;
-            AsimovLog.WriteLine("Mode set to drinking mode.");
+            // Verify we're not already in another mode
+            if (AsimovMode.None == modeController.CurrentMode)
+            {
+                // Set the mode to drinking mode
+                modeController.CurrentMode = AsimovMode.Drinking;
+                AsimovLog.WriteLine("Mode set to drinking mode.");
+            }
         }
 
         private static void OnBothArmsUp(object sender, EventArgs e)
         {
             // Exit Mode
-            Console.WriteLine("BothArmsUp Gesture Recognized");
-            AsimovLog.WriteLine("BothArmsUp Gesture Recognized");
+            Console.WriteLine("Exit Mode (BothArmsUp) Gesture Recognized");
+            AsimovLog.WriteLine("Exit Mode (BothArmsUp) Gesture Recognized");
 
-            // Set the mode to none in order to exit the current mode
-            modeController.CurrentMode = AsimovMode.None;
-            AsimovLog.WriteLine("Mode set to none.");
+            // Verify we're in a mode
+            if (AsimovMode.None != modeController.CurrentMode)
+            {
+                // Set the mode to none in order to exit the current mode
+                modeController.CurrentMode = AsimovMode.None;
+                ConfirmModeChange();
+                AsimovLog.WriteLine("Mode set to none.");
+            }
         }
 
         private static void OnBothElbowsBentUp(object sender, EventArgs e)
         {
-            // Exit Mode
-            Console.WriteLine("BothElbowsBentUp Gesture Recognized");
-            AsimovLog.WriteLine("BothElbowsBentUp Gesture Recognized");
+            // Follow Mode
+            Console.WriteLine("Follow Mode (BothElbowsBentUp) Gesture Recognized");
+            AsimovLog.WriteLine("Follow Mode (BothElbowsBentUp) Gesture Recognized");
 
-            // Set the mode to none in order to exit the current mode
-            modeController.CurrentMode = AsimovMode.None;
-            AsimovLog.WriteLine("Mode set to follow.");
+            // Verify we're not already in another mode
+            if (AsimovMode.None == modeController.CurrentMode)
+            {
+                // Set the mode to follow
+                modeController.CurrentMode = AsimovMode.Follow;
+                ConfirmModeChange();
+                AsimovLog.WriteLine("Mode set to follow.");
+            }
         }
 
         private static void OnLeftArmBentDownRightArmDown(object sender, EventArgs e)
         {
-            // Exit Mode
-            Console.WriteLine("LeftArmBentDownRightArmDown Gesture Recognized");
-            AsimovLog.WriteLine("LeftArmBentDownRightArmDown Gesture Recognized");
+            // Turn Around
+            Console.WriteLine("Turn Around (LeftArmBentDownRightArmDown) Gesture Recognized");
+            AsimovLog.WriteLine("Turn Around (LeftArmBentDownRightArmDown) Gesture Recognized");
 
-            // Set the mode to none in order to exit the current mode
-            modeController.CurrentMode = AsimovMode.None;
-            AsimovLog.WriteLine("Mode set to turn around.");
+            // Turn the Create 180 degrees.
+            roomba.SpinAngle(Constants.DefaultVelocity, 180);
+            AsimovLog.WriteLine("Turned the Create clockwise 180 degrees.");
         }
 
         private static void OnLeftArmDownRightArmBentDown(object sender, EventArgs e)
         {
-            // Exit Mode
-            Console.WriteLine("LeftArmDownRightArmBentDown Gesture Recognized");
-            AsimovLog.WriteLine("LeftArmDownRightArmBentDown Gesture Recognized");
+            // Move Backward
+            Console.WriteLine("Move Backward (LeftArmDownRightArmBentDown) Gesture Recognized");
+            AsimovLog.WriteLine("Move Backward (LeftArmDownRightArmBentDown) Gesture Recognized");
 
-            // Set the mode to none in order to exit the current mode
-            modeController.CurrentMode = AsimovMode.None;
-            AsimovLog.WriteLine("Mode set to move away.");
+            // Drive the Create backward a finite distance
+            roomba.DriveDistance(-Constants.DefaultVelocity, Constants.DefaultDriveStep);
+            AsimovLog.WriteLine("Drove the Create backward 0.5 m.");
         }
 
         private static void OnLeftArmDownRightArmBentUp(object sender, EventArgs e)
         {
-            // Exit Mode
-            Console.WriteLine("LeftArmDownRightArmBentUp Gesture Recognized");
-            AsimovLog.WriteLine("LeftArmDownRightArmBentUp Gesture Recognized");
+            // Move Forward
+            Console.WriteLine("Move Forward (LeftArmDownRightArmBentUp) Gesture Recognized");
+            AsimovLog.WriteLine("Move Forward (LeftArmDownRightArmBentUp) Gesture Recognized");
 
-            // Set the mode to none in order to exit the current mode
-            modeController.CurrentMode = AsimovMode.None;
-            AsimovLog.WriteLine("Mode set to move forward.");
+            // Drive the Create forward a finite distance
+            roomba.DriveDistance(Constants.DefaultVelocity, Constants.DefaultDriveStep);
+            AsimovLog.WriteLine("Drove the Create forward 0.5 m.");
         }
 
         private static void OnLeftArmDownRightArmOut(object sender, EventArgs e)
         {
-            // Exit Mode
-            Console.WriteLine("LeftArmDownRightArmOut Gesture Recognized");
-            AsimovLog.WriteLine("LeftArmDownRightArmOut Gesture Recognized");
+            // Turn Right (Clockwise)
+            Console.WriteLine("Turn Right (LeftArmDownRightArmOut) Gesture Recognized");
+            AsimovLog.WriteLine("Turn Right (LeftArmDownRightArmOut) Gesture Recognized");
 
-            // Set the mode to none in order to exit the current mode
-            modeController.CurrentMode = AsimovMode.None;
-            AsimovLog.WriteLine("Mode set to turn right.");
+            // Turn the Create clockwise a finite number of degrees
+            roomba.SpinAngle(Constants.DefaultVelocity, Constants.DefaultSpinStep);
+            AsimovLog.WriteLine("Turned the Create clockwise 30 degrees.");
         }
 
         private static void OnLeftArmOutRightArmDown(object sender, EventArgs e)
         {
-            // Exit Mode
-            Console.WriteLine("LeftArmOutRightArmDown Gesture Recognized");
-            AsimovLog.WriteLine("LeftArmOutRightArmDown Gesture Recognized");
+            // Turn Left (Counterclockwise)
+            Console.WriteLine("Turn Left (LeftArmOutRightArmDown) Gesture Recognized");
+            AsimovLog.WriteLine("Turn Left (LeftArmOutRightArmDown) Gesture Recognized");
 
-            // Set the mode to none in order to exit the current mode
-            modeController.CurrentMode = AsimovMode.None;
-            AsimovLog.WriteLine("Mode set to turn left.");
+            // Turn the Create counterclockwise a finite number of degrees
+            roomba.SpinAngle(-Constants.DefaultVelocity, Constants.DefaultSpinStep);
+            AsimovLog.WriteLine("Turned the Create counterclockwise 30 degrees.");
         }
 
         private static void OnLeftArmOutRightArmUp(object sender, EventArgs e)
         {
-            // Exit Mode
-            Console.WriteLine("LeftArmOutRightArmUp Gesture Recognized");
-            AsimovLog.WriteLine("LeftArmOutRightArmUp Gesture Recognized");
+            // Center Mode
+            Console.WriteLine("Center Mode (LeftArmOutRightArmUp) Gesture Recognized");
+            AsimovLog.WriteLine("Center Mode (LeftArmOutRightArmUp) Gesture Recognized");
 
-            // Set the mode to none in order to exit the current mode
-            modeController.CurrentMode = AsimovMode.None;
-            AsimovLog.WriteLine("Mode set to center.");
+            // Verify we're not already in another mode
+            if (AsimovMode.None == modeController.CurrentMode)
+            {
+                // Set the mode to center mode
+                modeController.CurrentMode = AsimovMode.Center;
+                ConfirmModeChange();
+                AsimovLog.WriteLine("Mode set to center.");
+            }
         }
 
         private static void OnLeftArmUpRightArmOut(object sender, EventArgs e)
         {
-            // Exit Mode
-            Console.WriteLine("LeftArmUpRightArmOut Gesture Recognized");
-            AsimovLog.WriteLine("LeftArmUpRightArmOut Gesture Recognized");
+            // Avoid Mode
+            Console.WriteLine("Avoid Mode (LeftArmUpRightArmOut) Gesture Recognized");
+            AsimovLog.WriteLine("Avoid Mode (LeftArmUpRightArmOut) Gesture Recognized");
 
-            // Set the mode to none in order to exit the current mode
-            modeController.CurrentMode = AsimovMode.None;
-            AsimovLog.WriteLine("Mode set to none.");
+            // Verify we're not already in another mode
+            if (AsimovMode.None == modeController.CurrentMode)
+            {
+                // Set the mode to avoid
+                modeController.CurrentMode = AsimovMode.Avoid;
+                ConfirmModeChange();
+                AsimovLog.WriteLine("Mode set to avoid.");
+            }
         }
 
         private static void ConfirmModeChange()
