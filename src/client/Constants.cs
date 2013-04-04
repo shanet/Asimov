@@ -15,12 +15,14 @@ namespace AsimovClient
         /// <summary>
         /// The angle in degrees around the center within which a person is considered centered.
         /// </summary>
-        public const double CenteredTolerance = 3.0;
+        public const double CenteredTolerance = 10.0;
 
         /// <summary>
         /// The desired number of meters to be from from the skeleton in follow mode.
         /// </summary>
         public const double DesiredDistanceFromSkelton = 1.5;
+
+        public const double DistanceFromSkeletonTolerance = 0.25;
 
         /// <summary>
         /// Default number of degrees to spin for gesture and voice commands.
@@ -30,7 +32,7 @@ namespace AsimovClient
         /// <summary>
         /// Default number of meters to drive for gesture and voice commands.
         /// </summary>
-        public const double DefaultDriveStep = 0.5;
+        public const double DefaultDriveStep = 0.1;
 
         /// <summary>
         /// Default velocity in meters/second for gesture and voice commands.
@@ -41,5 +43,7 @@ namespace AsimovClient
         /// The amount of time to wait before firing another gesture event of the same type.
         /// </summary>
         public static readonly TimeSpan GestureWaitTime = new TimeSpan(0, 0, 0, 1);
+
+        public static readonly TimeSpan ActionWaitTime = new TimeSpan(0, 0, 0, 0, 500);
     }
 }

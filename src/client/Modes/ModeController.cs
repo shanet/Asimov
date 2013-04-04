@@ -16,10 +16,13 @@ namespace AsimovClient.Modes
     {
         private ICreateController roomba;
 
+        private DateTime lastActionTime;
+
         public ModeController(ICreateController roomba)
         {
             this.CurrentMode = AsimovMode.None;
             this.roomba = roomba;
+            this.lastActionTime = DateTime.MinValue;
         }
 
         public AsimovMode CurrentMode { get; set; }
@@ -50,10 +53,20 @@ namespace AsimovClient.Modes
             // Center the skeleton
             this.CenterSkeleton(skeleton);
 
-            if (Constants.DesiredDistanceFromSkelton < distanceFromSkeleton)
+            if (DateTime.Now.Subtract(this.lastActionTime) > Constants.ActionWaitTime)
             {
-                // Drive toward the skeleton as much as possible
-                this.roomba.DriveDistance(Constants.DefaultVelocity, Math.Min(distanceFromSkeleton - Constants.DesiredDistanceFromSkelton, CreateConstants.DistanceMax));
+                if (Constants.DesiredDistanceFromSkelton + Constants.DistanceFromSkeletonTolerance < distanceFromSkeleton)
+                {
+                    // Drive toward the skeleton one step
+                    this.roomba.DriveDistance(Constants.DefaultVelocity, Math.Min(distanceFromSkeleton - Constants.DesiredDistanceFromSkelton, Constants.DefaultDriveStep));
+                    this.lastActionTime = DateTime.Now;
+                }
+                else if (Constants.DesiredDistanceFromSkelton - Constants.DistanceFromSkeletonTolerance > distanceFromSkeleton)
+                {
+                    // Drive away from the skeleton one step
+                    this.roomba.DriveDistance(-Constants.DefaultVelocity, Math.Min(Constants.DesiredDistanceFromSkelton - distanceFromSkeleton, Constants.DefaultDriveStep));
+                    this.lastActionTime = DateTime.Now;
+                }
             }
         }
 
@@ -74,7 +87,10 @@ namespace AsimovClient.Modes
             // Determine if we need to center the skeleton we see
             if (angle < -Constants.CenteredTolerance || angle > Constants.CenteredTolerance)
             {
-                this.roomba.SpinAngle(Math.Sign(angle) * CreateConstants.VelocityMax, (int)angle); 
+                if (DateTime.Now.Subtract(this.lastActionTime) > Constants.ActionWaitTime)
+                {
+                    this.roomba.SpinAngle(-Math.Sign(angle) * CreateConstants.VelocityMax, (int)angle);
+                }
             }
         }
     }

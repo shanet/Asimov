@@ -42,6 +42,8 @@ namespace AsimovClient
 
         private static SpeechRecognitionEngine speechEngine;
 
+        private static DateTime lastActionTime;
+
         public static void Main(string[] args)
         {
             try
@@ -49,9 +51,16 @@ namespace AsimovClient
                 KinectSensorChooser sensorChooser = new KinectSensorChooser();
 
                 endEvent = new ManualResetEvent(false);
-                roomba = new AsimovController(new ConsoleCreateCommunicator());
+                roomba = new AsimovController(new TcpCreateCommunicator("127.0.0.1", 4545));
                 modeController = new ModeController(roomba);
                 gestures = InitGestures();
+                lastActionTime = DateTime.MinValue;
+
+
+                //TEMP
+                roomba.Beep();
+                //TEMP
+
 
                 // Find the Kinect and subscribe to changes in the sensor
                 sensorChooser.KinectChanged += KinectSensorChanged;
@@ -136,10 +145,14 @@ namespace AsimovClient
                         // Send the new skeleton to the mode controller
                         modeController.UpdateSkeleton(skeleton);
 
-                        // Send the new skeleton to gesture handlers
-                        foreach (IGesture gesture in gestures)
+                        // Only send a new skeleton to gesture recognizers if we haven't acted recently
+                        if (DateTime.Now.Subtract(lastActionTime) > Constants.ActionWaitTime)
                         {
-                            gesture.UpdateGesture(skeleton);
+                            // Send the new skeleton to gesture handlers
+                            foreach (IGesture gesture in gestures)
+                            {
+                                gesture.UpdateGesture(skeleton);
+                            }
                         }
                     }
                     else if (skeleton.TrackingState == SkeletonTrackingState.PositionOnly)
@@ -271,7 +284,7 @@ namespace AsimovClient
                 kinect.SkeletonStream.Enable();
 
                 // Tilt the Kinect to allow for the best view of the skeletons
-                kinect.ElevationAngle = 0;
+                kinect.ElevationAngle = 20;
             }
 
             if (args.OldSensor != null)
@@ -293,6 +306,7 @@ namespace AsimovClient
             {
                 // Set the mode to drinking mode
                 modeController.CurrentMode = AsimovMode.Drinking;
+                ConfirmModeChange();
                 AsimovLog.WriteLine("Mode set to drinking mode.");
             }
         }
@@ -337,6 +351,7 @@ namespace AsimovClient
 
             // Turn the Create 180 degrees.
             roomba.SpinAngle(Constants.DefaultVelocity, 180);
+            lastActionTime = DateTime.Now;
             AsimovLog.WriteLine("Turned the Create clockwise 180 degrees.");
         }
 
@@ -348,6 +363,7 @@ namespace AsimovClient
 
             // Drive the Create backward a finite distance
             roomba.DriveDistance(-Constants.DefaultVelocity, Constants.DefaultDriveStep);
+            lastActionTime = DateTime.Now;
             AsimovLog.WriteLine("Drove the Create backward 0.5 m.");
         }
 
@@ -359,29 +375,32 @@ namespace AsimovClient
 
             // Drive the Create forward a finite distance
             roomba.DriveDistance(Constants.DefaultVelocity, Constants.DefaultDriveStep);
+            lastActionTime = DateTime.Now;
             AsimovLog.WriteLine("Drove the Create forward 0.5 m.");
         }
 
         private static void OnLeftArmDownRightArmOut(object sender, EventArgs e)
         {
-            // Turn Right (Clockwise)
-            Console.WriteLine("Turn Right (LeftArmDownRightArmOut) Gesture Recognized");
-            AsimovLog.WriteLine("Turn Right (LeftArmDownRightArmOut) Gesture Recognized");
+            // Turn Left (Counterclockwise)
+            Console.WriteLine("Turn Left (LeftArmDownRightArmOut) Gesture Recognized");
+            AsimovLog.WriteLine("Turn Left (LeftArmDownRightArmOut) Gesture Recognized");
 
-            // Turn the Create clockwise a finite number of degrees
-            roomba.SpinAngle(Constants.DefaultVelocity, Constants.DefaultSpinStep);
-            AsimovLog.WriteLine("Turned the Create clockwise 30 degrees.");
+            // Turn the Create counterclockwise a finite number of degrees
+            roomba.SpinAngle(-Constants.DefaultVelocity, Constants.DefaultSpinStep);
+            lastActionTime = DateTime.Now;
+            AsimovLog.WriteLine("Turned the Create counterclockwise 30 degrees.");
         }
 
         private static void OnLeftArmOutRightArmDown(object sender, EventArgs e)
         {
-            // Turn Left (Counterclockwise)
-            Console.WriteLine("Turn Left (LeftArmOutRightArmDown) Gesture Recognized");
-            AsimovLog.WriteLine("Turn Left (LeftArmOutRightArmDown) Gesture Recognized");
+            // Turn Right (Clockwise)
+            Console.WriteLine("Turn Right (LeftArmOutRightArmDown) Gesture Recognized");
+            AsimovLog.WriteLine("Turn Right (LeftArmOutRightArmDown) Gesture Recognized");
 
-            // Turn the Create counterclockwise a finite number of degrees
-            roomba.SpinAngle(-Constants.DefaultVelocity, Constants.DefaultSpinStep);
-            AsimovLog.WriteLine("Turned the Create counterclockwise 30 degrees.");
+            // Turn the Create clockwise a finite number of degrees
+            roomba.SpinAngle(Constants.DefaultVelocity, Constants.DefaultSpinStep);
+            lastActionTime = DateTime.Now;
+            AsimovLog.WriteLine("Turned the Create clockwise 30 degrees.");
         }
 
         private static void OnLeftArmOutRightArmUp(object sender, EventArgs e)
@@ -418,7 +437,7 @@ namespace AsimovClient
 
         private static void ConfirmModeChange()
         {
-            roomba.FlashLed(Led.Advance, 2, 500);
+            //roomba.FlashLed(Led.Advance, 2, 500);
             roomba.Beep();
             roomba.Beep();
         }
