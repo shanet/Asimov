@@ -19,6 +19,15 @@ namespace AsimovClient
     using Modes;
     using Sensing.Gestures;
 
+    using System.Speech.AudioFormat;
+    using System.Speech.Recognition;
+    using System.IO;
+    using System.Text;
+    using System.Windows;
+    using System.Windows.Documents;
+    using System.Windows.Media;
+    using System.ComponentModel;
+
     public class AsimovClient
     {
         private static ManualResetEvent endEvent;
@@ -29,7 +38,9 @@ namespace AsimovClient
 
         private static ModeController modeController;
 
-        private static ICollection<IGesture> gestures;  
+        private static ICollection<IGesture> gestures;
+
+        private static SpeechRecognitionEngine speechEngine;
 
         public static void Main(string[] args)
         {
@@ -135,6 +146,114 @@ namespace AsimovClient
                     {
                         //TODO
                     }
+                }
+            }
+        }
+
+        private static RecognizerInfo GetKinectRecognizer()
+        {
+            foreach (RecognizerInfo recognizer in SpeechRecognitionEngine.InstalledRecognizers())
+            {
+                string value;
+                recognizer.AdditionalInfo.TryGetValue("Kinect", out value);
+                if ("True".Equals(value, StringComparison.OrdinalIgnoreCase) && "en-US".Equals(recognizer.Culture.Name, StringComparison.OrdinalIgnoreCase))
+                {
+                    return recognizer;
+                }
+            }
+
+            return null;
+        }
+
+        private static void startSpeechRecognition(RecognizerInfo ri)
+        {
+            speechEngine = new SpeechRecognitionEngine(ri.Id);
+            using (var memoryStream = new MemoryStream(Encoding.ASCII.GetBytes("SpeechGrammar.xml")))
+            {
+                var g = new Grammar(memoryStream);
+                speechEngine.LoadGrammar(g);
+            }
+            speechEngine.SpeechRecognized += SpeechRecognized;
+            speechEngine.SpeechRecognitionRejected += SpeechRejected;
+
+            speechEngine.SetInputToAudioStream(
+                 kinect.AudioSource.Start(), new SpeechAudioFormatInfo(EncodingFormat.Pcm, 16000, 16, 1, 32000, 2, null));
+            speechEngine.RecognizeAsync(RecognizeMode.Multiple);
+
+
+        }
+
+        private static void SpeechRejected(object sender, SpeechRecognitionRejectedEventArgs e)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        private static void SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
+        {
+            // Speech utterance confidence below which we treat speech as if it hadn't been heard
+            const double ConfidenceThreshold = 0.3;
+
+            if (e.Result.Confidence >= ConfidenceThreshold)
+            {
+                switch (e.Result.Semantics.Value.ToString())
+                {
+                    /* TODO: implement cases for each voice command */
+                    case "FORWARD":
+                         roomba.DriveDistance(Constants.DefaultVelocity, Constants.DefaultDriveStep);
+                         AsimovLog.WriteLine("Drove the Create forward 0.5 m.");
+                        break;
+                    case "BACKWARD":
+                         roomba.SpinAngle(Constants.DefaultVelocity, 180);
+                         AsimovLog.WriteLine("Turned the Create clockwise 180 degrees.");
+                        break;
+                    case "LEFT":
+                        // Turn the Create counterclockwise a finite number of degrees
+                        roomba.SpinAngle(-Constants.DefaultVelocity, Constants.DefaultSpinStep);
+                        AsimovLog.WriteLine("Turned the Create counterclockwise 30 degrees.");
+                        break;
+                    case "RIGHT":
+                        // Turn the Create clockwise a finite number of degrees
+                        roomba.SpinAngle(Constants.DefaultVelocity, Constants.DefaultSpinStep);
+                        AsimovLog.WriteLine("Turned the Create clockwise 30 degrees.");
+                        break;
+                    case "FOLLOW":
+                        // Verify we're not already in another mode
+                        if (AsimovMode.None == modeController.CurrentMode)
+                        {
+                            // Set the mode to follow
+                            modeController.CurrentMode = AsimovMode.Follow;
+                            ConfirmModeChange();
+                            AsimovLog.WriteLine("Mode set to follow.");
+                        }
+                        break;
+                    case "AVOID":
+                        // Verify we're not already in another mode
+                        if (AsimovMode.None == modeController.CurrentMode)
+                        {
+                            // Set the mode to avoid
+                            modeController.CurrentMode = AsimovMode.Avoid;
+                            ConfirmModeChange();
+                            AsimovLog.WriteLine("Mode set to avoid.");
+                        }
+                        break;
+                    case "DRINK":
+                        // Verify we're not already in another mode
+                        if (AsimovMode.None == modeController.CurrentMode)
+                        {
+                            // Set the mode to drinking mode
+                            modeController.CurrentMode = AsimovMode.Drinking;
+                            AsimovLog.WriteLine("Mode set to drinking mode.");
+                        }
+                        break;
+                    case "EXIT":
+                        if (AsimovMode.None != modeController.CurrentMode)
+                        {
+                            // Set the mode to none in order to exit the current mode
+                            modeController.CurrentMode = AsimovMode.None;
+                            ConfirmModeChange();
+                            AsimovLog.WriteLine("Mode set to none.");
+                        }
+                        break;
                 }
             }
         }

@@ -1,0 +1,65 @@
+﻿<grammar version="1.0" xml:lang="en-US" root="rootRule" tag-format="semantics/1.0-literals" xmlns="http://www.w3.org/2001/06/grammar">
+  <rule id="rootRule">
+    <one-of>
+      <item>
+        <tag>FORWARD</tag>
+        <one-of>
+          <item> forwards </item>
+          <item> forward </item>
+        </one-of>
+      </item>
+      <item>
+        <tag>BACKWARD</tag>
+        <one-of>
+          <item> turn around </item>
+          <item> reverse </item>
+        </one-of>
+      </item>
+      <item>
+        <tag>FOLLOW</tag>
+        <one-of>
+          <item> follow </item>
+          <item> come with me </item>
+          </one-of>
+      </item>
+      <item>
+        <tag>AVOID</tag>
+        <one-of>
+          <item> avoid me</item>
+          <item> go away </item>
+          </one-of>
+      </item>
+      <item>
+        <tag>DRINK</tag>
+        <one-of>
+          <item> drinking mode</item>
+          </one-of>
+      </item>
+      <item>
+        <tag>EXIT</tag>
+        <one-of>
+          <item> exit mode</item>
+          <item> stop </item>
+          </one-of>
+      </item>
+      <item>
+        <tag>LEFT</tag>
+        <one-of>
+          <item> turn left </item>
+        </one-of>
+      </item>
+      <item>
+        <tag>RIGHT</tag>
+        <one-of>
+          <item> turn right </item>
+        </one-of>
+      </item>
+      <item>
+        <tag>CENTER</tag>
+        <one-of>
+          <item> look at me </item>
+        </one-of>
+      </item>
+    </one-of>
+  </rule>
+</grammar>
