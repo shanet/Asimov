@@ -9,24 +9,18 @@ namespace AsimovClient
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
-    using System.Threading;
-    using Create;
-    using Logging;
-
-    using Microsoft.Kinect;
-    using Microsoft.Kinect.Toolkit;
-
-    using Modes;
-    using Sensing.Gestures;
-
+    using System.IO;
     using System.Speech.AudioFormat;
     using System.Speech.Recognition;
-    using System.IO;
     using System.Text;
-    using System.Windows;
-    using System.Windows.Documents;
-    using System.Windows.Media;
-    using System.ComponentModel;
+    using System.Threading;
+
+    using Create;
+    using Logging;
+    using Microsoft.Kinect;
+    using Microsoft.Kinect.Toolkit;
+    using Modes;
+    using Sensing.Gestures;
 
     public class AsimovClient
     {
@@ -56,11 +50,9 @@ namespace AsimovClient
                 gestures = InitGestures();
                 lastActionTime = DateTime.MinValue;
 
-
                 //TEMP
                 roomba.Beep();
                 //TEMP
-
 
                 // Find the Kinect and subscribe to changes in the sensor
                 sensorChooser.KinectChanged += KinectSensorChanged;
@@ -178,7 +170,7 @@ namespace AsimovClient
             return null;
         }
 
-        private static void startSpeechRecognition(RecognizerInfo ri)
+        private static void StartSpeechRecognition(RecognizerInfo ri)
         {
             speechEngine = new SpeechRecognitionEngine(ri.Id);
             using (var memoryStream = new MemoryStream(Encoding.ASCII.GetBytes("SpeechGrammar.xml")))
@@ -186,14 +178,13 @@ namespace AsimovClient
                 var g = new Grammar(memoryStream);
                 speechEngine.LoadGrammar(g);
             }
+
             speechEngine.SpeechRecognized += SpeechRecognized;
             speechEngine.SpeechRecognitionRejected += SpeechRejected;
 
             speechEngine.SetInputToAudioStream(
                  kinect.AudioSource.Start(), new SpeechAudioFormatInfo(EncodingFormat.Pcm, 16000, 16, 1, 32000, 2, null));
             speechEngine.RecognizeAsync(RecognizeMode.Multiple);
-
-
         }
 
         private static void SpeechRejected(object sender, SpeechRecognitionRejectedEventArgs e)
@@ -210,7 +201,6 @@ namespace AsimovClient
             {
                 switch (e.Result.Semantics.Value.ToString())
                 {
-                    /* TODO: implement cases for each voice command */
                     case "FORWARD":
                          roomba.DriveDistance(Constants.DefaultVelocity, Constants.DefaultDriveStep);
                          AsimovLog.WriteLine("Drove the Create forward 0.5 m.");
@@ -238,6 +228,7 @@ namespace AsimovClient
                             ConfirmModeChange();
                             AsimovLog.WriteLine("Mode set to follow.");
                         }
+
                         break;
                     case "AVOID":
                         // Verify we're not already in another mode
@@ -248,6 +239,7 @@ namespace AsimovClient
                             ConfirmModeChange();
                             AsimovLog.WriteLine("Mode set to avoid.");
                         }
+
                         break;
                     case "DRINK":
                         // Verify we're not already in another mode
@@ -257,6 +249,7 @@ namespace AsimovClient
                             modeController.CurrentMode = AsimovMode.Drinking;
                             AsimovLog.WriteLine("Mode set to drinking mode.");
                         }
+
                         break;
                     case "EXIT":
                         if (AsimovMode.None != modeController.CurrentMode)
@@ -266,6 +259,7 @@ namespace AsimovClient
                             ConfirmModeChange();
                             AsimovLog.WriteLine("Mode set to none.");
                         }
+
                         break;
                 }
             }
@@ -285,6 +279,10 @@ namespace AsimovClient
 
                 // Tilt the Kinect to allow for the best view of the skeletons
                 kinect.ElevationAngle = 20;
+
+                // Turn on speech recognition
+                RecognizerInfo ri = GetKinectRecognizer();
+                StartSpeechRecognition(ri);
             }
 
             if (args.OldSensor != null)
