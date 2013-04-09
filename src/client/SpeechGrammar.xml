@@ -11,36 +11,9 @@
       <item>
         <tag>BACKWARD</tag>
         <one-of>
-          <item> turn around </item>
-          <item> reverse </item>
+          <item> backward </item>
+          <item> backwards </item>
         </one-of>
-      </item>
-      <item>
-        <tag>FOLLOW</tag>
-        <one-of>
-          <item> follow </item>
-          <item> come with me </item>
-          </one-of>
-      </item>
-      <item>
-        <tag>AVOID</tag>
-        <one-of>
-          <item> avoid me</item>
-          <item> go away </item>
-          </one-of>
-      </item>
-      <item>
-        <tag>DRINK</tag>
-        <one-of>
-          <item> drinking mode</item>
-          </one-of>
-      </item>
-      <item>
-        <tag>EXIT</tag>
-        <one-of>
-          <item> exit mode</item>
-          <item> stop </item>
-          </one-of>
       </item>
       <item>
         <tag>LEFT</tag>
@@ -55,9 +28,39 @@
         </one-of>
       </item>
       <item>
+        <tag>TURNAROUND</tag>
+        <one-of>
+          <item> turn around </item>
+        </one-of>
+      </item>
+      <item>
         <tag>CENTER</tag>
         <one-of>
           <item> look at me </item>
+        </one-of>
+      </item>
+      <item>
+        <tag>FOLLOW</tag>
+        <one-of>
+          <item> follow </item>
+          </one-of>
+      </item>
+      <item>
+        <tag>AVOID</tag>
+        <one-of>
+          <item> avoid </item>
+        </one-of>
+      </item>
+      <item>
+        <tag>DRINK</tag>
+        <one-of>
+          <item> drinking mode </item>
+          </one-of>
+      </item>
+      <item>
+        <tag>EXIT</tag>
+        <one-of>
+          <item> exit mode </item>
         </one-of>
       </item>
     </one-of>
