@@ -50,8 +50,9 @@ namespace AsimovClient
                 gestures = InitGestures();
                 lastActionTime = DateTime.MinValue;
 
-                //TEMP
+                //TEMP - Maybe?
                 roomba.Beep();
+                roomba.SetMode(CreateMode.Full);
                 //TEMP
 
                 // Find the Kinect and subscribe to changes in the sensor
@@ -61,6 +62,7 @@ namespace AsimovClient
                 // Do not exit until endEvent is fired
                 endEvent.WaitOne();
                 roomba.Dispose();
+                kinect.Dispose();
             }
             catch (Exception e)
             {
@@ -189,7 +191,12 @@ namespace AsimovClient
 
         private static void SpeechRejected(object sender, SpeechRecognitionRejectedEventArgs e)
         {
-            throw new System.NotImplementedException();
+            AsimovLog.WriteLine("Speech Rejected: " + e.Result);
+
+            roomba.Beep();
+            roomba.Beep();
+            roomba.Beep();
+            roomba.Beep();
         }
 
         private static void SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
@@ -203,21 +210,31 @@ namespace AsimovClient
                 {
                     case "FORWARD":
                          roomba.DriveDistance(Constants.DefaultVelocity, Constants.DefaultDriveStep);
+                         lastActionTime = DateTime.Now;
                          AsimovLog.WriteLine("Drove the Create forward 0.5 m.");
                         break;
                     case "BACKWARD":
                          roomba.SpinAngle(Constants.DefaultVelocity, 180);
+                         lastActionTime = DateTime.Now;
                          AsimovLog.WriteLine("Turned the Create clockwise 180 degrees.");
                         break;
                     case "LEFT":
                         // Turn the Create counterclockwise a finite number of degrees
                         roomba.SpinAngle(-Constants.DefaultVelocity, Constants.DefaultSpinStep);
+                        lastActionTime = DateTime.Now;
                         AsimovLog.WriteLine("Turned the Create counterclockwise 30 degrees.");
                         break;
                     case "RIGHT":
                         // Turn the Create clockwise a finite number of degrees
                         roomba.SpinAngle(Constants.DefaultVelocity, Constants.DefaultSpinStep);
+                        lastActionTime = DateTime.Now;
                         AsimovLog.WriteLine("Turned the Create clockwise 30 degrees.");
+                        break;
+                    case "TURNAROUND":
+                        // Turn the Create 180 degrees.
+                        roomba.SpinAngle(Constants.DefaultVelocity, 180);
+                        lastActionTime = DateTime.Now;
+                        AsimovLog.WriteLine("Turned the Create clockwise 180 degrees.");
                         break;
                     case "FOLLOW":
                         // Verify we're not already in another mode
@@ -281,8 +298,8 @@ namespace AsimovClient
                 kinect.ElevationAngle = 20;
 
                 // Turn on speech recognition
-                RecognizerInfo ri = GetKinectRecognizer();
-                StartSpeechRecognition(ri);
+                //RecognizerInfo ri = GetKinectRecognizer();
+                //StartSpeechRecognition(ri);
             }
 
             if (args.OldSensor != null)
@@ -347,10 +364,14 @@ namespace AsimovClient
             Console.WriteLine("Turn Around (LeftArmBentDownRightArmDown) Gesture Recognized");
             AsimovLog.WriteLine("Turn Around (LeftArmBentDownRightArmDown) Gesture Recognized");
 
-            // Turn the Create 180 degrees.
-            roomba.SpinAngle(Constants.DefaultVelocity, 180);
-            lastActionTime = DateTime.Now;
-            AsimovLog.WriteLine("Turned the Create clockwise 180 degrees.");
+            // Verify we're not in a mode
+            if (AsimovMode.None == modeController.CurrentMode)
+            {
+                // Turn the Create 180 degrees.
+                roomba.SpinAngle(Constants.DefaultVelocity, 180);
+                lastActionTime = DateTime.Now;
+                AsimovLog.WriteLine("Turned the Create clockwise 180 degrees.");
+            }
         }
 
         private static void OnLeftArmDownRightArmBentDown(object sender, EventArgs e)
@@ -359,10 +380,14 @@ namespace AsimovClient
             Console.WriteLine("Move Backward (LeftArmDownRightArmBentDown) Gesture Recognized");
             AsimovLog.WriteLine("Move Backward (LeftArmDownRightArmBentDown) Gesture Recognized");
 
-            // Drive the Create backward a finite distance
-            roomba.DriveDistance(-Constants.DefaultVelocity, Constants.DefaultDriveStep);
-            lastActionTime = DateTime.Now;
-            AsimovLog.WriteLine("Drove the Create backward 0.5 m.");
+            // Verify we're not in a mode
+            if (AsimovMode.None == modeController.CurrentMode)
+            {
+                // Drive the Create backward a finite distance
+                roomba.DriveDistance(-Constants.DefaultVelocity, Constants.DefaultDriveStep);
+                lastActionTime = DateTime.Now;
+                AsimovLog.WriteLine("Drove the Create backward 0.5 m.");
+            }
         }
 
         private static void OnLeftArmDownRightArmBentUp(object sender, EventArgs e)
@@ -370,11 +395,15 @@ namespace AsimovClient
             // Move Forward
             Console.WriteLine("Move Forward (LeftArmDownRightArmBentUp) Gesture Recognized");
             AsimovLog.WriteLine("Move Forward (LeftArmDownRightArmBentUp) Gesture Recognized");
-
-            // Drive the Create forward a finite distance
-            roomba.DriveDistance(Constants.DefaultVelocity, Constants.DefaultDriveStep);
-            lastActionTime = DateTime.Now;
-            AsimovLog.WriteLine("Drove the Create forward 0.5 m.");
+            
+            // Verify we're not in a mode
+            if (AsimovMode.None == modeController.CurrentMode)
+            {
+                // Drive the Create forward a finite distance
+                roomba.DriveDistance(Constants.DefaultVelocity, Constants.DefaultDriveStep);
+                lastActionTime = DateTime.Now;
+                AsimovLog.WriteLine("Drove the Create forward 0.5 m.");
+            }
         }
 
         private static void OnLeftArmDownRightArmOut(object sender, EventArgs e)
@@ -383,10 +412,14 @@ namespace AsimovClient
             Console.WriteLine("Turn Left (LeftArmDownRightArmOut) Gesture Recognized");
             AsimovLog.WriteLine("Turn Left (LeftArmDownRightArmOut) Gesture Recognized");
 
-            // Turn the Create counterclockwise a finite number of degrees
-            roomba.SpinAngle(-Constants.DefaultVelocity, Constants.DefaultSpinStep);
-            lastActionTime = DateTime.Now;
-            AsimovLog.WriteLine("Turned the Create counterclockwise 30 degrees.");
+            // Verify we're not in a mode
+            if (AsimovMode.None == modeController.CurrentMode)
+            {
+                // Turn the Create counterclockwise a finite number of degrees
+                roomba.SpinAngle(-Constants.DefaultVelocity, Constants.DefaultSpinStep);
+                lastActionTime = DateTime.Now;
+                AsimovLog.WriteLine("Turned the Create counterclockwise 30 degrees.");
+            }
         }
 
         private static void OnLeftArmOutRightArmDown(object sender, EventArgs e)
@@ -395,10 +428,14 @@ namespace AsimovClient
             Console.WriteLine("Turn Right (LeftArmOutRightArmDown) Gesture Recognized");
             AsimovLog.WriteLine("Turn Right (LeftArmOutRightArmDown) Gesture Recognized");
 
-            // Turn the Create clockwise a finite number of degrees
-            roomba.SpinAngle(Constants.DefaultVelocity, Constants.DefaultSpinStep);
-            lastActionTime = DateTime.Now;
-            AsimovLog.WriteLine("Turned the Create clockwise 30 degrees.");
+            // Verify we're not in a mode
+            if (AsimovMode.None == modeController.CurrentMode)
+            {
+                // Turn the Create clockwise a finite number of degrees
+                roomba.SpinAngle(Constants.DefaultVelocity, Constants.DefaultSpinStep);
+                lastActionTime = DateTime.Now;
+                AsimovLog.WriteLine("Turned the Create clockwise 30 degrees.");
+            }
         }
 
         private static void OnLeftArmOutRightArmUp(object sender, EventArgs e)

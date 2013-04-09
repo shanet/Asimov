@@ -22,6 +22,9 @@ namespace AsimovClient
         /// </summary>
         public const double DesiredDistanceFromSkelton = 1.5;
 
+        /// <summary>
+        /// The number of meters within DesiredDistanceFromSkeleton a skeleton can be without taking action
+        /// </summary>
         public const double DistanceFromSkeletonTolerance = 0.25;
 
         /// <summary>
@@ -44,6 +47,14 @@ namespace AsimovClient
         /// </summary>
         public static readonly TimeSpan GestureWaitTime = new TimeSpan(0, 0, 0, 1);
 
+        /// <summary>
+        /// The amount of time to wait before firing another action event.
+        /// </summary>
         public static readonly TimeSpan ActionWaitTime = new TimeSpan(0, 0, 0, 0, 500);
+
+        /// <summary>
+        /// The amount of time to wait before firing another center command.
+        /// </summary>
+        public static readonly TimeSpan CenterWaitTime = new TimeSpan(0, 0, 0, 1);
     }
 }

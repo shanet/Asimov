@@ -12,6 +12,8 @@ namespace AsimovClient.Modes
 
     using Microsoft.Kinect;
 
+    using global::AsimovClient.Helpers;
+
     public class ModeController
     {
         private ICreateController roomba;
@@ -72,7 +74,14 @@ namespace AsimovClient.Modes
 
         private void AvoidSkeleton(Skeleton skeleton)
         {
-            //TODO
+            double angle = Units.RadiansToDegrees(Math.Atan2(skeleton.Position.X, skeleton.Position.Z));
+
+            // Turn away from the skeleton
+            if (DateTime.Now.Subtract(this.lastActionTime) > Constants.ActionWaitTime)
+            {
+                this.roomba.SpinAngle(Math.Sign(angle) * Constants.DefaultVelocity, 180 - (int)Math.Abs(angle));
+                this.lastActionTime = DateTime.Now;
+            }
         }
 
         private void DrinkingMode(Skeleton skeleton)
@@ -82,14 +91,15 @@ namespace AsimovClient.Modes
 
         private void CenterSkeleton(Skeleton skeleton)
         {
-            double angle = Math.Atan2(skeleton.Position.X, skeleton.Position.Z) * 180 / Math.PI;
+            double angle = Units.RadiansToDegrees(Math.Atan2(skeleton.Position.X, skeleton.Position.Z));
 
             // Determine if we need to center the skeleton we see
             if (angle < -Constants.CenteredTolerance || angle > Constants.CenteredTolerance)
             {
-                if (DateTime.Now.Subtract(this.lastActionTime) > Constants.ActionWaitTime)
+                if (DateTime.Now.Subtract(this.lastActionTime) > Constants.CenterWaitTime)
                 {
-                    this.roomba.SpinAngle(-Math.Sign(angle) * CreateConstants.VelocityMax, (int)angle);
+                    this.roomba.SpinAngle(-Math.Sign(angle) * Constants.DefaultVelocity, (int)angle / 2);
+                    this.lastActionTime = DateTime.Now;
                 }
             }
         }
