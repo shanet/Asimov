@@ -10,8 +10,6 @@ namespace AsimovClient
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.IO;
-    using System.Speech.AudioFormat;
-    using System.Speech.Recognition;
     using System.Text;
     using System.Threading;
 
@@ -19,6 +17,8 @@ namespace AsimovClient
     using Logging;
     using Microsoft.Kinect;
     using Microsoft.Kinect.Toolkit;
+    using Microsoft.Speech.AudioFormat;
+    using Microsoft.Speech.Recognition;
     using Modes;
     using Sensing.Gestures;
 
@@ -175,7 +175,7 @@ namespace AsimovClient
         private static void StartSpeechRecognition(RecognizerInfo ri)
         {
             speechEngine = new SpeechRecognitionEngine(ri.Id);
-            using (var memoryStream = new MemoryStream(Encoding.ASCII.GetBytes("SpeechGrammar.xml")))
+            using (var memoryStream = new MemoryStream(Encoding.ASCII.GetBytes(File.ReadAllText("SpeechGrammar.xml"))))
             {
                 var g = new Grammar(memoryStream);
                 speechEngine.LoadGrammar(g);
@@ -191,7 +191,14 @@ namespace AsimovClient
 
         private static void SpeechRejected(object sender, SpeechRecognitionRejectedEventArgs e)
         {
-            AsimovLog.WriteLine("Speech Rejected: " + e.Result);
+            StringBuilder message = new StringBuilder("Speech input was rejected.");
+
+            foreach (RecognizedPhrase phrase in e.Result.Alternates)
+            {
+                message.AppendFormat("\n  Rejected phrase: {0}\n  Confidence score: {1}\n  Grammar name:  {2}\n", phrase.Text, phrase.Confidence, phrase.Grammar.Name);
+            }
+
+            AsimovLog.WriteLine(message.ToString());
 
             roomba.Beep();
             roomba.Beep();
@@ -201,42 +208,84 @@ namespace AsimovClient
 
         private static void SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
         {
-            // Speech utterance confidence below which we treat speech as if it hadn't been heard
-            const double ConfidenceThreshold = 0.3;
-
-            if (e.Result.Confidence >= ConfidenceThreshold)
+            if (e.Result.Confidence >= Constants.SpeechConfidenceThreshold)
             {
                 switch (e.Result.Semantics.Value.ToString())
                 {
                     case "FORWARD":
-                         roomba.DriveDistance(Constants.DefaultVelocity, Constants.DefaultDriveStep);
-                         lastActionTime = DateTime.Now;
-                         AsimovLog.WriteLine("Drove the Create forward 0.5 m.");
+                        Console.WriteLine("Move Forward Speech Recognized");
+                        AsimovLog.WriteLine("Move Forward Speech Recognized");
+            
+                        // Verify we're not in a mode
+                        if (AsimovMode.None == modeController.CurrentMode)
+                        {
+                            // Drive the Create forward a finite distance
+                            roomba.DriveDistance(Constants.DefaultVelocity, Constants.DefaultDriveStep);
+                            lastActionTime = DateTime.Now;
+                            AsimovLog.WriteLine("Drove the Create forward 0.5 m.");
+                        }
+
                         break;
                     case "BACKWARD":
-                         roomba.SpinAngle(Constants.DefaultVelocity, 180);
-                         lastActionTime = DateTime.Now;
-                         AsimovLog.WriteLine("Turned the Create clockwise 180 degrees.");
+                        Console.WriteLine("Move Backward Speech Recognized");
+                        AsimovLog.WriteLine("Move Backward Speech Recognized");
+
+                        // Verify we're not in a mode
+                        if (AsimovMode.None == modeController.CurrentMode)
+                        {
+                            // Drive the Create backward a finite distance
+                            roomba.DriveDistance(-Constants.DefaultVelocity, Constants.DefaultDriveStep);
+                            lastActionTime = DateTime.Now;
+                            AsimovLog.WriteLine("Drove the Create backward 0.5 m.");
+                        }
+
                         break;
                     case "LEFT":
-                        // Turn the Create counterclockwise a finite number of degrees
-                        roomba.SpinAngle(-Constants.DefaultVelocity, Constants.DefaultSpinStep);
-                        lastActionTime = DateTime.Now;
-                        AsimovLog.WriteLine("Turned the Create counterclockwise 30 degrees.");
+                        Console.WriteLine("Turn Left Speech Recognized");
+                        AsimovLog.WriteLine("Turn Left Speech Recognized");
+
+                        // Verify we're not in a mode
+                        if (AsimovMode.None == modeController.CurrentMode)
+                        {
+                            // Turn the Create counterclockwise a finite number of degrees
+                            roomba.SpinAngle(-Constants.DefaultVelocity, Constants.DefaultSpinStep);
+                            lastActionTime = DateTime.Now;
+                            AsimovLog.WriteLine("Turned the Create counterclockwise 30 degrees.");
+                        }
+
                         break;
                     case "RIGHT":
-                        // Turn the Create clockwise a finite number of degrees
-                        roomba.SpinAngle(Constants.DefaultVelocity, Constants.DefaultSpinStep);
-                        lastActionTime = DateTime.Now;
-                        AsimovLog.WriteLine("Turned the Create clockwise 30 degrees.");
+                        Console.WriteLine("Turn Right Speech Recognized");
+                        AsimovLog.WriteLine("Turn Right Speech Recognized");
+
+                        // Verify we're not in a mode
+                        if (AsimovMode.None == modeController.CurrentMode)
+                        {
+                            // Turn the Create clockwise a finite number of degrees
+                            roomba.SpinAngle(Constants.DefaultVelocity, Constants.DefaultSpinStep);
+                            lastActionTime = DateTime.Now;
+                            AsimovLog.WriteLine("Turned the Create clockwise 30 degrees.");
+                        }
+
                         break;
                     case "TURNAROUND":
-                        // Turn the Create 180 degrees.
-                        roomba.SpinAngle(Constants.DefaultVelocity, 180);
-                        lastActionTime = DateTime.Now;
-                        AsimovLog.WriteLine("Turned the Create clockwise 180 degrees.");
+                        Console.WriteLine("Turn Around Speech Recognized");
+                        AsimovLog.WriteLine("Turn Around Speech Recognized");
+
+                        // Verify we're not in a mode
+                        if (AsimovMode.None == modeController.CurrentMode)
+                        {
+                            // Turn the Create 180 degrees.
+                            roomba.SpinAngle(Constants.DefaultVelocity, 180);
+                            lastActionTime = DateTime.Now;
+                            AsimovLog.WriteLine("Turned the Create clockwise 180 degrees.");
+                        }
+
                         break;
                     case "FOLLOW":
+                        Console.WriteLine("Follow Mode Speech Recognized");
+                        AsimovLog.WriteLine("Follow Mode Speech Recognized");
+
                         // Verify we're not already in another mode
                         if (AsimovMode.None == modeController.CurrentMode)
                         {
@@ -248,6 +297,9 @@ namespace AsimovClient
 
                         break;
                     case "AVOID":
+                        Console.WriteLine("Avoid Mode Speech Recognized");
+                        AsimovLog.WriteLine("Avoid Mode Speech Recognized");
+
                         // Verify we're not already in another mode
                         if (AsimovMode.None == modeController.CurrentMode)
                         {
@@ -258,17 +310,40 @@ namespace AsimovClient
                         }
 
                         break;
+
+                    case "CENTER":
+                        Console.WriteLine("Center Mode Speech Recognized");
+                        AsimovLog.WriteLine("Center Mode Speech Recognized");
+
+                        // Verify we're not already in another mode
+                        if (AsimovMode.None == modeController.CurrentMode)
+                        {
+                            // Set the mode to center mode
+                            modeController.CurrentMode = AsimovMode.Center;
+                            ConfirmModeChange();
+                            AsimovLog.WriteLine("Mode set to center.");
+                        }
+
+                        break;
                     case "DRINK":
+                        Console.WriteLine("Drinking Mode Speech Recognized");
+                        AsimovLog.WriteLine("Drinking Mode Speech Recognized");
+
                         // Verify we're not already in another mode
                         if (AsimovMode.None == modeController.CurrentMode)
                         {
                             // Set the mode to drinking mode
                             modeController.CurrentMode = AsimovMode.Drinking;
+                            ConfirmModeChange();
                             AsimovLog.WriteLine("Mode set to drinking mode.");
                         }
 
                         break;
                     case "EXIT":
+                        Console.WriteLine("Exit Mode Speech Recognized");
+                        AsimovLog.WriteLine("Exit Mode Speech Recognized");
+
+                        // Verify we're in a mode
                         if (AsimovMode.None != modeController.CurrentMode)
                         {
                             // Set the mode to none in order to exit the current mode
@@ -297,9 +372,9 @@ namespace AsimovClient
                 // Tilt the Kinect to allow for the best view of the skeletons
                 kinect.ElevationAngle = 20;
 
-                // Turn on speech recognition
-                //RecognizerInfo ri = GetKinectRecognizer();
-                //StartSpeechRecognition(ri);
+                // Start speech recognition
+                RecognizerInfo ri = GetKinectRecognizer();
+                StartSpeechRecognition(ri);
             }
 
             if (args.OldSensor != null)

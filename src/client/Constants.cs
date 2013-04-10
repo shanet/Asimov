@@ -13,6 +13,11 @@ namespace AsimovClient
     public static class Constants
     {
         /// <summary>
+        /// Speech utterance confidence below which we treat speech as if it hadn't been heard
+        /// </summary>
+        public const double SpeechConfidenceThreshold = 0.3;
+
+        /// <summary>
         /// The angle in degrees around the center within which a person is considered centered.
         /// </summary>
         public const double CenteredTolerance = 10.0;
