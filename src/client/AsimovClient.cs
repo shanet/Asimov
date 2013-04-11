@@ -45,7 +45,7 @@ namespace AsimovClient
                 KinectSensorChooser sensorChooser = new KinectSensorChooser();
 
                 endEvent = new ManualResetEvent(false);
-                roomba = new AsimovController(new TcpCreateCommunicator("127.0.0.1", 4545));
+                roomba = new AsimovController(new ConsoleCreateCommunicator());
                 modeController = new ModeController(roomba);
                 gestures = InitGestures();
                 lastActionTime = DateTime.MinValue;
@@ -59,16 +59,44 @@ namespace AsimovClient
                 sensorChooser.KinectChanged += KinectSensorChanged;
                 sensorChooser.Start();
 
-                // Do not exit until endEvent is fired
+                // Listen for console input in a separate thread
+                new Thread(ListenForConsoleInput).Start();
+
+                // Block until endEvent is fired
                 endEvent.WaitOne();
-                roomba.Dispose();
-                kinect.Dispose();
+
+                // Dispose of the Create and end the connection with the server
+                if (roomba != null)
+                {
+                    roomba.Dispose();
+                }
+
+                // Dispose of the Kinect
+                if (kinect != null)
+                {
+                    kinect.Dispose();
+                }
             }
             catch (Exception e)
             {
                 Console.Error.WriteLine("FATAL ERROR: {0}", e);
                 AsimovLog.WriteLine("FATAL ERROR: {0}", e);
             }
+        }
+
+        private static void ListenForConsoleInput()
+        {
+            string input;
+
+            // Wait for the exit command
+            do
+            {
+                input = Console.ReadLine();
+            }
+            while (string.Compare(input, Constants.ExitCommand, StringComparison.CurrentCultureIgnoreCase) != 0);
+
+            // The exit command was recieved, so fire endEvent
+            endEvent.Set();
         }
 
         private static ICollection<IGesture> InitGestures()

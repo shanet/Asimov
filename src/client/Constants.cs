@@ -13,6 +13,11 @@ namespace AsimovClient
     public static class Constants
     {
         /// <summary>
+        /// Command used to exit the client cleanly
+        /// </summary>
+        public const string ExitCommand = "exit";
+
+        /// <summary>
         /// Speech utterance confidence below which we treat speech as if it hadn't been heard
         /// </summary>
         public const double SpeechConfidenceThreshold = 0.3;
