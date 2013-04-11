@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Asimov.cs" />
     <Compile Include="AsimovClient.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Create\AsimovController.cs" />

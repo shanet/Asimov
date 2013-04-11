@@ -9,21 +9,20 @@ namespace AsimovClient.Modes
     using System;
 
     using Create;
+    using Helpers;
 
     using Microsoft.Kinect;
 
-    using global::AsimovClient.Helpers;
-
     public class ModeController
     {
-        private ICreateController roomba;
+        private ICreateController create;
 
         private DateTime lastActionTime;
 
         public ModeController(ICreateController roomba)
         {
             this.CurrentMode = AsimovMode.None;
-            this.roomba = roomba;
+            this.create = roomba;
             this.lastActionTime = DateTime.MinValue;
         }
 
@@ -48,6 +47,11 @@ namespace AsimovClient.Modes
             }
         }
 
+        public bool IsInMode()
+        {
+            return AsimovMode.None != this.CurrentMode;
+        }
+
         private void FollowSkeleton(Skeleton skeleton)
         {
             double distanceFromSkeleton = skeleton.Position.Z;
@@ -60,13 +64,13 @@ namespace AsimovClient.Modes
                 if (Constants.DesiredDistanceFromSkelton + Constants.DistanceFromSkeletonTolerance < distanceFromSkeleton)
                 {
                     // Drive toward the skeleton one step
-                    this.roomba.DriveDistance(Constants.DefaultVelocity, Math.Min(distanceFromSkeleton - Constants.DesiredDistanceFromSkelton, Constants.DefaultDriveStep));
+                    this.create.DriveDistance(Constants.DefaultVelocity, Math.Min(distanceFromSkeleton - Constants.DesiredDistanceFromSkelton, Constants.DefaultDriveStep));
                     this.lastActionTime = DateTime.Now;
                 }
                 else if (Constants.DesiredDistanceFromSkelton - Constants.DistanceFromSkeletonTolerance > distanceFromSkeleton)
                 {
                     // Drive away from the skeleton one step
-                    this.roomba.DriveDistance(-Constants.DefaultVelocity, Math.Min(Constants.DesiredDistanceFromSkelton - distanceFromSkeleton, Constants.DefaultDriveStep));
+                    this.create.DriveDistance(-Constants.DefaultVelocity, Math.Min(Constants.DesiredDistanceFromSkelton - distanceFromSkeleton, Constants.DefaultDriveStep));
                     this.lastActionTime = DateTime.Now;
                 }
             }
@@ -79,7 +83,7 @@ namespace AsimovClient.Modes
             // Turn away from the skeleton
             if (DateTime.Now.Subtract(this.lastActionTime) > Constants.ActionWaitTime)
             {
-                this.roomba.SpinAngle(Math.Sign(angle) * Constants.DefaultVelocity, 180 - (int)Math.Abs(angle));
+                this.create.SpinAngle(Math.Sign(angle) * Constants.DefaultVelocity, 180 - (int)Math.Abs(angle));
                 this.lastActionTime = DateTime.Now;
             }
         }
@@ -98,7 +102,7 @@ namespace AsimovClient.Modes
             {
                 if (DateTime.Now.Subtract(this.lastActionTime) > Constants.CenterWaitTime)
                 {
-                    this.roomba.SpinAngle(-Math.Sign(angle) * Constants.DefaultVelocity, (int)angle / 2);
+                    this.create.SpinAngle(-Math.Sign(angle) * Constants.DefaultVelocity, (int)angle / 2);
                     this.lastActionTime = DateTime.Now;
                 }
             }
