@@ -6,7 +6,9 @@
 
 namespace AsimovClient.Create
 {
-    public interface ICreateController
+    using System;
+
+    public interface ICreateController : IDisposable
     {
         #region Core
         /// <summary>

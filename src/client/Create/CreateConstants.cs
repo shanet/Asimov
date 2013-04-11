@@ -34,6 +34,16 @@ namespace AsimovClient.Create
         public const double RadiusMax = 2.0;
 
         /// <summary>
+        /// Minimum drivable distance in meters.
+        /// </summary>
+        public const double DistanceMin = -2.0;
+
+        /// <summary>
+        /// Maximum drivable distance in meters.
+        /// </summary>
+        public const double DistanceMax = 2.0;
+
+        /// <summary>
         /// Minimum Power LED color value.
         /// </summary>
         public const int PowerLedColorMin = 0;

@@ -178,6 +178,9 @@ namespace AsimovClient.Create
             AsimovLog.WriteLine("Beeping.");
 
             this.communicator.ExecuteCommand("BEEP");
+
+            // Let the beep be heard before doing anything else
+            System.Threading.Thread.Sleep(40);
         }
 
         public void DefineSong(int songNumber, int[] notes, int[] durations)
@@ -225,6 +228,24 @@ namespace AsimovClient.Create
             AsimovLog.WriteLine("Waiting until the event \"{0}\" occurs.", waitEvent);
 
             this.communicator.ExecuteCommand("WAIT EVENT {0}", (int)waitEvent);
+        }
+
+        public void Dispose()
+        {
+            this.Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (this.communicator != null)
+                {
+                    this.communicator.Dispose();
+                    this.communicator = null;
+                }
+            }
         }
     }
 }

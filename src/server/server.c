@@ -4,7 +4,7 @@ int main(int argc, char **argv) {
     processCmdLineArgs(argc, argv);
     forkOnStartup();
     installSignalHandlers();
-    //connectToDevice();
+    connectToDevice();
     startServer();
 
     while(1) {
@@ -178,6 +178,9 @@ int processDriveCommand(void) {
         }
     // DRIVE STRAIGHT
     } else if(strcmp(arg, PROT_DRIVE_STRAIGHT) == 0) {
+        arg = getNextArg();
+        if(arg == NULL) return ERR;
+    
         int driveType;
         if(strcmp(arg, PROT_DRIVE_NORMAL) == 0) {
             driveType = 1;
@@ -220,6 +223,9 @@ int processDriveCommand(void) {
         return (biscDirectDrive(rightVelocity, leftVelocity) == BISC_SUCCESS ? SUCCESS : ERR); 
     // DRIVE SPIN
     } else if(strcmp(arg, PROT_DRIVE_SPIN) == 0) {
+        arg = getNextArg();
+        if(arg == NULL) return ERR;
+        
         int spinType;
         if(strcmp(arg, PROT_DRIVE_NORMAL) == 0) {
             spinType = 1;

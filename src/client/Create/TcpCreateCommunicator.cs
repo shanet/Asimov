@@ -20,6 +20,7 @@ namespace AsimovClient.Create
         private const string ReadyResponse = "REDY";
         private const string AcknowledgementResponse = "ACK";
         private const string ErrorResponse = "ERR";
+        private const string EndCommand = "END";
 
         private TcpClient client;
         private IPAddress ip;
@@ -57,11 +58,6 @@ namespace AsimovClient.Create
         {
         }
 
-        ~TcpCreateCommunicator()
-        {
-            this.client.Close();
-        }
-
         public bool ExecuteCommand(string commandFormat, params object[] args)
         {
             string command = string.Format(commandFormat, args);
@@ -80,6 +76,26 @@ namespace AsimovClient.Create
             }
 
             return true;
+        }
+
+        public void Dispose()
+        {
+            this.Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (this.client != null)
+                {
+                    // Send the end command and close the connection
+                    this.SendCommand(EndCommand);
+                    this.client.Close();
+                    this.client = null;
+                }
+            }
         }
 
         private void Handshake()
