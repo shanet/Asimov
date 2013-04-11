@@ -25,6 +25,7 @@
 #define BUFFER         1024
 #define BACKLOG        10
 #define DEFAULT_DEVICE "/dev/ttyUSB0"
+#define DEFAULT_IP     "127.0.0.1"
 #define DEFAULT_PORT   "4545"
 
 #define NO_VERBOSE  0
