@@ -14,5 +14,10 @@ namespace AsimovClient.Helpers
         {
             return Math.Abs(value1 - value2) <= tolerance;
         }
+
+        public static bool AreEqualWithinAngularTolerance(double value1, double value2, double tolerance)
+        {
+            return Math.Abs(value1 - value2) % 180 <= tolerance;
+        }
     }
 }

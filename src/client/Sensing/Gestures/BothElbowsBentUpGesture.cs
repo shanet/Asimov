@@ -20,7 +20,7 @@ namespace AsimovClient.Sensing.Gestures
         private const float DesiredRightElbowJointAngle = 90;
         private const float JointToleranceAngle = 30;
 
-        private const float DesiredLeftPlaneAngle = -180;
+        private const float DesiredLeftPlaneAngle = 0;
         private const float DesiredRightPlaneAngle = 0;
         private const float PlaneToleranceAngle = 45;
 
@@ -64,17 +64,13 @@ namespace AsimovClient.Sensing.Gestures
                           && MathHelper.AreEqualWithinTolerance(angles[3], DesiredRightShoulderJointAngle, JointToleranceAngle);
 
                 // Check if the skeleton's arms are in the XY plane
-                /*angles[0] = SkeletonHelper.CalculateAngleYZ(skeleton.Joints[JointType.ElbowLeft], skeleton.Joints[JointType.WristLeft]);
-                angles[1] = SkeletonHelper.CalculateAngleYZ(skeleton.Joints[JointType.ShoulderLeft], skeleton.Joints[JointType.ElbowLeft]);
+                angles[0] = SkeletonHelper.CalculateAngleYZ(skeleton.Joints[JointType.ElbowLeft], skeleton.Joints[JointType.WristLeft]);
                 angles[2] = SkeletonHelper.CalculateAngleYZ(skeleton.Joints[JointType.ElbowRight], skeleton.Joints[JointType.WristRight]);
-                angles[3] = SkeletonHelper.CalculateAngleYZ(skeleton.Joints[JointType.ShoulderRight], skeleton.Joints[JointType.ElbowRight]);
 
                 isValid = isValid
-                          && MathHelper.AreEqualWithinTolerance(angles[0], DesiredLeftPlaneAngle, PlaneToleranceAngle)
-                          && MathHelper.AreEqualWithinTolerance(angles[1], DesiredLeftPlaneAngle, PlaneToleranceAngle)
-                          && MathHelper.AreEqualWithinTolerance(angles[2], DesiredRightPlaneAngle, PlaneToleranceAngle)
-                          && MathHelper.AreEqualWithinTolerance(angles[3], DesiredRightPlaneAngle, PlaneToleranceAngle);
-            */}
+                          && MathHelper.AreEqualWithinAngularTolerance(angles[0], DesiredLeftPlaneAngle, PlaneToleranceAngle)
+                          && MathHelper.AreEqualWithinAngularTolerance(angles[2], DesiredRightPlaneAngle, PlaneToleranceAngle);
+            }
 
             return isValid;
         }

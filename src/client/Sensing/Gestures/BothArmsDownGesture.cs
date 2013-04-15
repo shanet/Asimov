@@ -59,7 +59,7 @@ namespace AsimovClient.Sensing.Gestures
                           && MathHelper.AreEqualWithinTolerance(angles[3], DesiredJointAngle, JointToleranceAngle);
 
                 // Check if the skeleton's arms are in the XY plane
-                /*angles[0] = SkeletonHelper.CalculateAngleYZ(skeleton.Joints[JointType.ElbowLeft], skeleton.Joints[JointType.WristLeft]);
+                angles[0] = SkeletonHelper.CalculateAngleYZ(skeleton.Joints[JointType.ElbowLeft], skeleton.Joints[JointType.WristLeft]);
                 angles[1] = SkeletonHelper.CalculateAngleYZ(skeleton.Joints[JointType.ShoulderLeft], skeleton.Joints[JointType.ElbowLeft]);
                 angles[2] = SkeletonHelper.CalculateAngleYZ(skeleton.Joints[JointType.ElbowRight], skeleton.Joints[JointType.WristRight]);
                 angles[3] = SkeletonHelper.CalculateAngleYZ(skeleton.Joints[JointType.ShoulderRight], skeleton.Joints[JointType.ElbowRight]);
@@ -68,7 +68,7 @@ namespace AsimovClient.Sensing.Gestures
                           && MathHelper.AreEqualWithinTolerance(angles[0], DesiredPlaneAngle, PlaneToleranceAngle)
                           && MathHelper.AreEqualWithinTolerance(angles[1], DesiredPlaneAngle, PlaneToleranceAngle)
                           && MathHelper.AreEqualWithinTolerance(angles[2], DesiredPlaneAngle, PlaneToleranceAngle)
-                          && MathHelper.AreEqualWithinTolerance(angles[3], DesiredPlaneAngle, PlaneToleranceAngle);*/
+                          && MathHelper.AreEqualWithinTolerance(angles[3], DesiredPlaneAngle, PlaneToleranceAngle);
             }
 
             return isValid;

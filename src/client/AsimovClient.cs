@@ -9,13 +9,14 @@ namespace AsimovClient
     using System;
     using System.Threading;
 
+    using Create;
     using Logging;
 
     public class AsimovClient
     {
         private static Asimov asimov;
 
-        private static ManualResetEvent endEvent;
+        public static ManualResetEvent endEvent;
 
         public static void Main(string[] args)
         {
