@@ -447,6 +447,17 @@ namespace AsimovClient
 
                         this.ExitMode();
                         break;
+
+                    case "SHUTDOWN":
+                        Console.WriteLine("Shutdown Speech Recognized");
+                        AsimovLog.WriteLine("Shutdown Speech Recognized");
+
+                        for (int i = 0; i < 5; i++)
+                        {
+                            this.create.Beep();
+                        }
+                        AsimovClient.endEvent.Set();
+                        break;
                 }
             }
         }
