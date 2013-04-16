@@ -80,6 +80,7 @@ void handleConnection() {
         switch(recvStatus) {
             case  0:
                 if(verbosity > NO_VERBOSE) fprintf(stderr, "%s: Client unexpectedly closed the connection.\n", prog);
+                exit(ABNORMAL_EXIT);
                 break;
             case NETWORK_ERR:
                 if(verbosity > NO_VERBOSE) fprintf(stderr, "%s: Error communicating with client: %s\n", prog, strerror(errno));

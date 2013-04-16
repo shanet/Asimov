@@ -32,7 +32,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Kinect, Version=1.6.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Kinect, Version=1.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Microsoft.Kinect.Toolkit">
+      <HintPath>..\..\libs\Microsoft.Kinect.Toolkit\Microsoft.Kinect.Toolkit.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Speech, Version=11.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -42,7 +50,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Asimov.cs" />
     <Compile Include="AsimovClient.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="Create\AsimovController.cs" />
     <Compile Include="Create\ConsoleCreateCommunicator.cs" />
     <Compile Include="Create\CreateConstants.cs" />
@@ -52,20 +62,34 @@
     <Compile Include="Create\WaitEvent.cs" />
     <Compile Include="Create\ICreateController.cs" />
     <Compile Include="Create\Led.cs" />
+    <Compile Include="Helpers\MathHelper.cs" />
+    <Compile Include="Helpers\SkeletonHelper.cs" />
     <Compile Include="Helpers\Units.cs" />
     <Compile Include="Helpers\Verify.cs" />
     <Compile Include="Logging\AsimovLog.cs" />
+    <Compile Include="Modes\AsimovMode.cs" />
+    <Compile Include="Modes\ModeController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Sensing\PersonLocator.cs" />
+    <Compile Include="Sensing\Gestures\BothArmsDownGesture.cs" />
+    <Compile Include="Sensing\Gestures\BothArmsOutGesture.cs" />
+    <Compile Include="Sensing\Gestures\BothElbowsBentUpGesture.cs" />
+    <Compile Include="Sensing\Gestures\IGesture.cs" />
+    <Compile Include="Sensing\Gestures\BothArmsUpGesture.cs" />
+    <Compile Include="Sensing\Gestures\LeftArmBentDownRightArmDownGesture.cs" />
+    <Compile Include="Sensing\Gestures\LeftArmDownRightArmBentDownGesture.cs" />
+    <Compile Include="Sensing\Gestures\LeftArmDownRightArmBentUpGesture.cs" />
+    <Compile Include="Sensing\Gestures\LeftArmDownRightArmOutGesture.cs" />
+    <Compile Include="Sensing\Gestures\LeftArmOutRightArmDownGesture.cs" />
+    <Compile Include="Sensing\Gestures\LeftArmOutRightArmUpGesture.cs" />
+    <Compile Include="Sensing\Gestures\LeftArmUpRightArmOutGesture.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\libs\Microsoft.Kinect.Toolkit\Microsoft.Kinect.Toolkit.csproj">
-      <Project>{c6f9c31b-6130-4443-a5cc-ef0664552ecd}</Project>
-      <Name>Microsoft.Kinect.Toolkit</Name>
-    </ProjectReference>
+    <Content Include="SpeechGrammar.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

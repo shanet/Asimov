@@ -8,37 +8,36 @@ namespace AsimovClient
 {
     using System;
     using System.Threading;
+
     using Create;
     using Logging;
-    using Microsoft.Kinect.Toolkit;
-    using Sensing;
 
     public class AsimovClient
     {
-        private static ManualResetEvent endEvent;
+        private static Asimov asimov;
 
-        private static ICreateController roomba;
-
-        private static KinectSensorChooser sensorChooser;
-
-        private static PersonLocator personLocator;
+        public static ManualResetEvent endEvent;
 
         public static void Main(string[] args)
         {
             try
             {
-                roomba = new AsimovController(new ConsoleCreateCommunicator());                
                 endEvent = new ManualResetEvent(false);
-                sensorChooser = new KinectSensorChooser();
-                personLocator = new PersonLocator(sensorChooser);
 
-                // Subscribe to events that we need to handle
-                personLocator.OnPersonNotCentered += OnPersonNotCentered;
-                personLocator.OnPersonCentered += OnPersonCentered;
+                // Start Asimov
+                asimov = new Asimov();
 
-                sensorChooser.Start();
+                // Listen for console input in a separate thread
+                new Thread(ListenForConsoleInput).Start();
 
+                // Block until endEvent is fired
                 endEvent.WaitOne();
+
+                // Dispose of Asimov and its resources
+                if (asimov != null)
+                {
+                    asimov.Dispose();
+                }
             }
             catch (Exception e)
             {
@@ -47,15 +46,19 @@ namespace AsimovClient
             }
         }
 
-        private static void OnPersonCentered(object sender)
+        private static void ListenForConsoleInput()
         {
-            roomba.Stop();
-        }
+            string input;
 
-        private static void OnPersonNotCentered(object sender, double angle)
-        {
-            //TODO: Turn a certain direction rather than a specific angle
-            roomba.SpinAngle(Math.Sign(angle) * CreateConstants.VelocityMax, (int)angle);
+            // Wait for the exit command
+            do
+            {
+                input = Console.ReadLine();
+            }
+            while (string.Compare(input, Constants.ExitCommand, StringComparison.CurrentCultureIgnoreCase) != 0);
+
+            // The exit command was recieved, so fire endEvent
+            endEvent.Set();
         }
     }
 }
