@@ -373,11 +373,6 @@ namespace AsimovClient
             }
 
             AsimovLog.WriteLine(message.ToString());
-
-            this.create.Beep();
-            this.create.Beep();
-            this.create.Beep();
-            this.create.Beep();
         }
 
         private void SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
