@@ -2,6 +2,10 @@
 // <copyright file="LeftArmDownRightArmOutGesture.cs" company="Aaron Goodermuth">
 //     Copyright (c) Aaron Goodermuth.  All rights reserved.
 // </copyright>
+// <summary>
+//     Class that recognizes a gesture in which a skeleton’s left arm is
+//     straight down at its side and its right arm is straight out to the side.
+// </summary>
 //------------------------------------------------------------------------------
 
 namespace AsimovClient.Sensing.Gestures

@@ -2,6 +2,10 @@
 // <copyright file="Units.cs" company="Gage Ames">
 //     Copyright (c) Gage Ames.  All rights reserved.
 // </copyright>
+// <summary>
+//     Static class that contains helper functions to perform unit-related
+//     mathematics, such as converting radians to degrees.
+// </summary>
 //------------------------------------------------------------------------------
 
 namespace AsimovClient.Helpers

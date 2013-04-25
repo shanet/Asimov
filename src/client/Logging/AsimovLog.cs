@@ -2,6 +2,10 @@
 // <copyright file="AsimovLog.cs" company="Gage Ames">
 //     Copyright (c) Gage Ames.  All rights reserved.
 // </copyright>
+// <summary>
+//     Static class that facilitates writing to a log file and retaining the
+//     previous copy of the log (if it exists).
+// </summary>
 //------------------------------------------------------------------------------
 
 namespace AsimovClient.Logging

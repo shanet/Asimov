@@ -2,6 +2,10 @@
 // <copyright file="BothArmsDownGesture.cs" company="Aaron Goodermuth">
 //     Copyright (c) Aaron Goodermuth.  All rights reserved.
 // </copyright>
+// <summary>
+//     Class that recognizes a gesture in which both arms of a skeleton are
+//     straight down at its side.
+// </summary>
 //------------------------------------------------------------------------------
 
 namespace AsimovClient.Sensing.Gestures

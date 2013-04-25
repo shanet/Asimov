@@ -2,6 +2,11 @@
 // <copyright file="Asimov.cs" company="Gage Ames">
 //     Copyright (c) Gage Ames.  All rights reserved.
 // </copyright>
+// <summary>
+//     The class that represents Asimov.  Receives input from the Kinect,
+//     passes it along to decision-making classes, and executes reactions on
+//     the Create.
+// </summary>
 //------------------------------------------------------------------------------
 
 namespace AsimovClient
@@ -323,7 +328,7 @@ namespace AsimovClient
                     }
                     else if (skeleton.TrackingState == SkeletonTrackingState.PositionOnly)
                     {
-                        //TODO
+                        //TODO: Handle skeletons we're not tracking
                     }
                 }
             }
@@ -451,7 +456,8 @@ namespace AsimovClient
                         {
                             this.create.Beep();
                         }
-                        AsimovClient.endEvent.Set();
+
+                        AsimovClient.EndEvent.Set();
                         break;
                 }
             }

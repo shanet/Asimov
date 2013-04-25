@@ -2,6 +2,9 @@
 // <copyright file="Constants.cs" company="Gage Ames">
 //     Copyright (c) Gage Ames.  All rights reserved.
 // </copyright>
+// <summary>
+//     Defines common constant and default values for Asimov.
+// </summary>
 //------------------------------------------------------------------------------
 
 namespace AsimovClient

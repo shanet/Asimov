@@ -2,6 +2,10 @@
 // <copyright file="TcpCreateCommunicator.cs" company="Gage Ames">
 //     Copyright (c) Gage Ames.  All rights reserved.
 // </copyright>
+// <summary>
+//     Class that implements ICreateCommunicator to transmit all commands over
+//     the network using TCP/IP.
+// </summary>
 //------------------------------------------------------------------------------
 
 namespace AsimovClient.Create

@@ -2,6 +2,10 @@
 // <copyright file="MathHelper.cs" company="Gage Ames">
 //     Copyright (c) Gage Ames.  All rights reserved.
 // </copyright>
+// <summary>
+//     Static class that contains helper function to perform common math
+//     operations, such as checking equality within a tolerance.
+// </summary>
 //------------------------------------------------------------------------------
 
 namespace AsimovClient.Helpers

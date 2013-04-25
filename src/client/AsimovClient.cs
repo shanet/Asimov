@@ -2,6 +2,10 @@
 // <copyright file="AsimovClient.cs" company="Gage Ames">
 //     Copyright (c) Gage Ames.  All rights reserved.
 // </copyright>
+// <summary>
+//     The main class of the client.  Initializes Asimov and accepts command
+//     line input.
+// </summary>
 //------------------------------------------------------------------------------
 
 namespace AsimovClient
@@ -9,20 +13,19 @@ namespace AsimovClient
     using System;
     using System.Threading;
 
-    using Create;
     using Logging;
 
     public class AsimovClient
     {
         private static Asimov asimov;
 
-        public static ManualResetEvent endEvent;
+        public static ManualResetEvent EndEvent { get; private set; }
 
         public static void Main(string[] args)
         {
             try
             {
-                endEvent = new ManualResetEvent(false);
+                EndEvent = new ManualResetEvent(false);
 
                 // Start Asimov
                 asimov = new Asimov();
@@ -31,7 +34,7 @@ namespace AsimovClient
                 new Thread(ListenForConsoleInput).Start();
 
                 // Block until endEvent is fired
-                endEvent.WaitOne();
+                EndEvent.WaitOne();
 
                 // Dispose of Asimov and its resources
                 if (asimov != null)
@@ -58,7 +61,7 @@ namespace AsimovClient
             while (string.Compare(input, Constants.ExitCommand, StringComparison.CurrentCultureIgnoreCase) != 0);
 
             // The exit command was recieved, so fire endEvent
-            endEvent.Set();
+            EndEvent.Set();
         }
     }
 }

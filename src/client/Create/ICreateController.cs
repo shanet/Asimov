@@ -2,6 +2,10 @@
 // <copyright file="ICreateController.cs" company="Gage Ames">
 //     Copyright (c) Gage Ames.  All rights reserved.
 // </copyright>
+// <summary>
+//     Interface outlining methods that can be called to control the movement
+//     of the iRobot Create.
+// </summary>
 //------------------------------------------------------------------------------
 
 namespace AsimovClient.Create

@@ -2,6 +2,10 @@
 // <copyright file="ModeController.cs" company="Gage Ames">
 //     Copyright (c) Gage Ames.  All rights reserved.
 // </copyright>
+// <summary>
+//     Class that contains the logic to keep track of Asimov’s operating mode
+//     and react appropriately to Kinect data when in a given mode.
+// </summary>
 //------------------------------------------------------------------------------
 
 namespace AsimovClient.Modes
@@ -90,7 +94,7 @@ namespace AsimovClient.Modes
 
         private void DrinkingMode(Skeleton skeleton)
         {
-            //TODO
+            //TODO: Implement drinking mode
         }
 
         private void CenterSkeleton(Skeleton skeleton)

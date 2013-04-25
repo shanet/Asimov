@@ -2,6 +2,10 @@
 // <copyright file="BothElbowsBentUpGesture.cs" company="Aaron Goodermuth">
 //     Copyright (c) Aaron Goodermuth.  All rights reserved.
 // </copyright>
+// <summary>
+//     Class that recognizes a gesture in which both arms of a skeleton are
+//     straight out to the side with its elbows bent up.
+// </summary>
 //------------------------------------------------------------------------------
 
 namespace AsimovClient.Sensing.Gestures
