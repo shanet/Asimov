@@ -2,6 +2,10 @@
 // <copyright file="ConsoleCreateCommunicator.cs" company="Gage Ames">
 //     Copyright (c) Gage Ames.  All rights reserved.
 // </copyright>
+// <summary>
+//     Class that implements ICreateCommunicator to print all commands to the
+//     console only.
+// </summary>
 //------------------------------------------------------------------------------
 
 namespace AsimovClient.Create

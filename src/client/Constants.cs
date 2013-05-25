@@ -2,6 +2,9 @@
 // <copyright file="Constants.cs" company="Gage Ames">
 //     Copyright (c) Gage Ames.  All rights reserved.
 // </copyright>
+// <summary>
+//     Defines common constant and default values for Asimov.
+// </summary>
 //------------------------------------------------------------------------------
 
 namespace AsimovClient
@@ -12,6 +15,11 @@ namespace AsimovClient
 
     public static class Constants
     {
+        /// <summary>
+        /// Command used to exit the client cleanly
+        /// </summary>
+        public const string ExitCommand = "exit";
+
         /// <summary>
         /// Speech utterance confidence below which we treat speech as if it hadn't been heard
         /// </summary>
