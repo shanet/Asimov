@@ -2,6 +2,10 @@
 // <copyright file="AsimovController.cs" company="Gage Ames">
 //     Copyright (c) Gage Ames.  All rights reserved.
 // </copyright>
+// <summary>
+//     Class that implements ICreateController to issue commands using the
+//     syntax of the protocol defined in the Asimov server.
+// </summary>
 //------------------------------------------------------------------------------
 
 namespace AsimovClient.Create

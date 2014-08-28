@@ -2,6 +2,9 @@
 // <copyright file="ICreateCommunicator.cs" company="Gage Ames">
 //     Copyright (c) Gage Ames.  All rights reserved.
 // </copyright>
+// <summary>
+//     Interface outlining methods used to issue Asimov commands.
+// </summary>
 //------------------------------------------------------------------------------
 
 namespace AsimovClient.Create

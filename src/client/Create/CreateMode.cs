@@ -2,6 +2,9 @@
 // <copyright file="CreateMode.cs" company="Gage Ames">
 //     Copyright (c) Gage Ames.  All rights reserved.
 // </copyright>
+// <summary>
+//     Enumeration for the different modes the iRobot Create supports.
+// </summary>
 //------------------------------------------------------------------------------
 
 namespace AsimovClient.Create

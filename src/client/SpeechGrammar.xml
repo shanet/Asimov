@@ -73,6 +73,13 @@
         </one-of>
       </item>
         
+      <item>
+        <tag>SHUTDOWN</tag>
+        <one-of>
+          <item> shut down </item>
+        </one-of>
+      </item>
+        
     </one-of>
   </rule>
 </grammar>

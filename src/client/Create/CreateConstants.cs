@@ -2,6 +2,9 @@
 // <copyright file="CreateConstants.cs" company="Gage Ames">
 //     Copyright (c) Gage Ames.  All rights reserved.
 // </copyright>
+// <summary>
+//     Constant values related to the iRobot Create.
+// </summary>
 //------------------------------------------------------------------------------
 
 namespace AsimovClient.Create

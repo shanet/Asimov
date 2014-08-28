@@ -2,6 +2,10 @@
 // <copyright file="TcpCreateCommunicator.cs" company="Gage Ames">
 //     Copyright (c) Gage Ames.  All rights reserved.
 // </copyright>
+// <summary>
+//     Class that implements ICreateCommunicator to transmit all commands over
+//     the network using TCP/IP.
+// </summary>
 //------------------------------------------------------------------------------
 
 namespace AsimovClient.Create
@@ -16,6 +20,9 @@ namespace AsimovClient.Create
 
     public class TcpCreateCommunicator : ICreateCommunicator
     {
+        private const string DefaultIPAddress = "127.0.0.1";
+        private const int DefaultPort = 4545;
+        
         private const string HandshakeGreeting = "HELO";
         private const string ReadyResponse = "REDY";
         private const string AcknowledgementResponse = "ACK";
@@ -25,6 +32,11 @@ namespace AsimovClient.Create
         private TcpClient client;
         private IPAddress ip;
         private int port;
+
+        public TcpCreateCommunicator()
+            : this(DefaultIPAddress, DefaultPort)
+        { // Empty
+        }
 
         public TcpCreateCommunicator(IPAddress ip, int port)
         {

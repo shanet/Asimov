@@ -2,6 +2,10 @@
 // <copyright file="SkeletonHelper.cs" company="Gage Ames">
 //     Copyright (c) Gage Ames.  All rights reserved.
 // </copyright>
+// <summary>
+//     Static class that contains helper functions to perform common operations
+//     on Kinect skeleton parts, such as calculating the angle between joins.
+// </summary>
 //------------------------------------------------------------------------------
 
 namespace AsimovClient.Helpers

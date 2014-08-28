@@ -2,12 +2,16 @@
 // <copyright file="Verify.cs" company="Gage Ames">
 //     Copyright (c) Gage Ames.  All rights reserved.
 // </copyright>
+// <summary>
+//     Static class that contains helper functions to verify Boolean conditions
+//     are satisfied, and react accordingly.  Mostly used to verify function
+//     arguments and throw appropriate exceptions.
+// </summary>
 //------------------------------------------------------------------------------
 
 namespace AsimovClient.Helpers
 {
     using System;
-    using System.Data;
 
     public static class Verify
     {

@@ -2,6 +2,10 @@
 // <copyright file="WaitEvent.cs" company="Gage Ames">
 //     Copyright (c) Gage Ames.  All rights reserved.
 // </copyright>
+// <summary>
+//     Enumeration for the different events the iRobot Create can wait for
+//     (e.g. time deltas, distance deltas, button presses, and sensors).
+// </summary>
 //------------------------------------------------------------------------------
 
 namespace AsimovClient.Create

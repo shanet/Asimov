@@ -67,7 +67,7 @@ int getServerInfo(char *port) {
     hints.ai_flags    = AI_PASSIVE;
     hints.ai_socktype = SOCK_STREAM;
 
-    return (getaddrinfo(NULL, port, &hints, &serverInfo) == 0 ? SUCCESS : ERR); 
+    return (getaddrinfo(DEFAULT_IP, port, &hints, &serverInfo) == 0 ? SUCCESS : ERR); 
 }
 
 
